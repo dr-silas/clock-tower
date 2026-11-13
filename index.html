@@ -1527,7 +1527,7 @@
         } else {
           document.body.classList.remove("abyss-theme");
           el.subtitleBadge.textContent = "BABEL OF BLACK KEYS";
-          el.mainTitle.textContent = "黒鍵のバベル";
+          el.mainTitle.textContent = "鍵のかかった時計塔";
         }
 
         const up = metaState.upgrades;
@@ -1624,10 +1624,10 @@
           el.modeSwitchBtn.textContent = "🔒 逆さまのバベル（20層制覇で解放）";
         } else if (runState.isAbyss) {
           el.modeSwitchBtn.className = "mode-switch-btn abyss-active";
-          el.modeSwitchBtn.textContent = "🔮 逆さまのバベル（クリックで黒鍵のバベルへ）";
+          el.modeSwitchBtn.textContent = "🔮 逆さまのバベル（クリックで鍵のかかった時計塔へ）";
         } else {
           el.modeSwitchBtn.className = "mode-switch-btn";
-          el.modeSwitchBtn.textContent = "⚔️ 黒鍵のバベル（クリックで逆さまのバベルへ）";
+          el.modeSwitchBtn.textContent = "⚔️ 鍵のかかった時計塔（クリックで逆さまのバベルへ）";
         }
 
         el.floorBadge.textContent = runState.isAbyss
@@ -1832,7 +1832,7 @@
               el.challengeAbyssBtn.style.display = "inline-block";
               showMessage(
                 "success",
-                `🏆【黒鍵のバベル・全20層制覇！】塔の天頂の封印を解き放ちました（歯車 +${clearBonus}個）！${
+                `🏆【鍵のかかった時計塔・全20層制覇！】塔の天頂の封印を解き放ちました（歯車 +${clearBonus}個）！${
                   firstClearUnlock
                     ? "さらに高難度モード【逆さまのバベル】が解放されました！"
                     : "高難度【逆さまのバベル】への挑戦も可能です！"
@@ -2080,7 +2080,7 @@
       // --- モード切替ボタン ---
       el.modeSwitchBtn.addEventListener("click", () => {
         if (!metaState.abyssUnlocked) {
-          showMessage("warning", "高難度【逆さまのバベル】は、まず「黒鍵のバベル」全20層を制覇すると解放されます！");
+          showMessage("warning", "高難度【逆さまのバベル】は、まず「鍵のかかった時計塔」全20層を制覇すると解放されます！");
           return;
         }
         startNewRun(!runState.isAbyss);
