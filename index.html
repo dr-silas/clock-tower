@@ -3,15 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="robots" content="noindex, nofollow">
-  <title>鍵のかかった時計塔</title>
+  <title>黒鍵のバベル ― BABEL OF BLACK KEYS ―</title>
   <style>
     :root {
-      --bg-void: #1d1510;
-      --bg-parchment: #f5ecda;
+      --bg-void: #140e0a;
       --bg-paper: #fcf8ef;
       --bg-card: #efe2c8;
-      --bg-velvet: #2a1814;
       --ink-dark: #231710;
       --ink-muted: #584233;
       --brass-primary: #9a6c28;
@@ -22,8 +19,10 @@
       --accent-crimson-light: #b83232;
       --accent-emerald: #1f5c39;
       --accent-emerald-light: #2e7d50;
+      --accent-purple: #5b2c6f;
+      --accent-royal: #264873;
       --border-antique: #b4935e;
-      --shadow-deep: 0 18px 42px rgba(15, 9, 5, 0.45);
+      --shadow-deep: 0 22px 50px rgba(10, 6, 3, 0.65);
       --radius-lg: 16px;
       --radius-md: 10px;
       --radius-sm: 6px;
@@ -40,8 +39,8 @@
       min-height: 100%;
       background-color: var(--bg-void);
       background-image:
-        radial-gradient(ellipse at 50% 0%, rgba(154, 108, 40, 0.22) 0%, transparent 65%),
-        radial-gradient(circle at 15% 85%, rgba(143, 34, 34, 0.14) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 0%, rgba(154, 108, 40, 0.25) 0%, transparent 65%),
+        radial-gradient(circle at 15% 85%, rgba(143, 34, 34, 0.16) 0%, transparent 50%),
         repeating-linear-gradient(
           45deg,
           rgba(255, 255, 255, 0.015) 0px,
@@ -51,17 +50,38 @@
         );
       color: var(--ink-dark);
       font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
-      line-height: 1.65;
+      line-height: 1.6;
+      transition: background-color 0.4s ease;
     }
 
-    /* 背景の巨大な装飾歯車（視認性を邪魔しない極薄レイヤー） */
+    /* 高難度「逆さまのバベル」時のダーク紫＆反転世界テーマ */
+    body.abyss-theme {
+      --bg-void: #0d0712;
+      --brass-primary: #7d3c98;
+      --brass-light: #c39bd3;
+      --brass-shine: #ebdef0;
+      --brass-dark: #4a235a;
+      --border-antique: #8e6ba1;
+      background-image:
+        radial-gradient(ellipse at 50% 100%, rgba(125, 60, 152, 0.34) 0%, transparent 65%),
+        radial-gradient(circle at 85% 15%, rgba(143, 34, 34, 0.22) 0%, transparent 55%);
+    }
+
+    body.abyss-theme .antique-frame {
+      background: #f6f0fa;
+      background-image:
+        radial-gradient(circle at 50% 100%, rgba(155, 89, 182, 0.16) 0%, transparent 60%),
+        linear-gradient(180deg, #faf5fd 0%, #ede2f5 100%);
+      outline-color: #2c1338;
+    }
+
     .bg-gear-layer {
       position: fixed;
       inset: 0;
       pointer-events: none;
       overflow: hidden;
       z-index: 0;
-      opacity: 0.14;
+      opacity: 0.15;
     }
 
     .bg-gear {
@@ -72,161 +92,201 @@
     }
 
     .gear-left {
-      width: 340px;
-      height: 340px;
-      top: -80px;
-      left: -90px;
+      width: 360px;
+      height: 360px;
+      top: -90px;
+      left: -100px;
       animation: spinSlow 90s linear infinite;
     }
 
     .gear-right {
-      width: 420px;
-      height: 420px;
-      bottom: -120px;
-      right: -110px;
+      width: 440px;
+      height: 440px;
+      bottom: -130px;
+      right: -120px;
       animation: spinSlowReverse 120s linear infinite;
     }
 
-    @keyframes spinSlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    @keyframes spinSlowReverse {
-      from { transform: rotate(360deg); }
-      to { transform: rotate(0deg); }
-    }
+    @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes spinSlowReverse { from { transform: rotate(360deg); } to { transform: rotate(0deg); } }
 
     .app-shell {
       position: relative;
       z-index: 1;
-      max-width: 820px;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 18px 14px 40px;
+      padding: 14px 12px 44px;
     }
 
-    /* 真鍮の二重額縁を持つメイン羊皮紙フレーム */
     .antique-frame {
       background: var(--bg-paper);
       background-image:
-        radial-gradient(circle at 50% 0%, rgba(214, 173, 96, 0.14) 0%, transparent 60%),
+        radial-gradient(circle at 50% 0%, rgba(214, 173, 96, 0.15) 0%, transparent 60%),
         linear-gradient(180deg, #fdfaf2 0%, #f5ebd6 100%);
       border: 2px solid var(--brass-primary);
       outline: 4px solid #382618;
       outline-offset: -8px;
       border-radius: var(--radius-lg);
-      box-shadow:
-        var(--shadow-deep),
-        inset 0 0 36px rgba(154, 108, 40, 0.22);
-      padding: 28px 24px 24px;
+      box-shadow: var(--shadow-deep), inset 0 0 36px rgba(154, 108, 40, 0.22);
+      padding: 24px 22px 22px;
       position: relative;
+      overflow: hidden;
     }
 
-    /* 四隅の真鍮コーナープレート装飾 */
     .corner-plate {
       position: absolute;
-      width: 26px;
-      height: 26px;
+      width: 24px;
+      height: 24px;
       pointer-events: none;
       z-index: 2;
     }
-    .corner-plate::before,
-    .corner-plate::after {
+    .corner-plate::before, .corner-plate::after {
       content: "";
       position: absolute;
       background: linear-gradient(135deg, var(--brass-shine), var(--brass-primary));
     }
     .corner-tl { top: 10px; left: 10px; }
-    .corner-tl::before { top: 0; left: 0; width: 22px; height: 3px; }
-    .corner-tl::after { top: 0; left: 0; width: 3px; height: 22px; }
-
+    .corner-tl::before { top: 0; left: 0; width: 20px; height: 3px; }
+    .corner-tl::after { top: 0; left: 0; width: 3px; height: 20px; }
     .corner-tr { top: 10px; right: 10px; }
-    .corner-tr::before { top: 0; right: 0; width: 22px; height: 3px; }
-    .corner-tr::after { top: 0; right: 0; width: 3px; height: 22px; }
-
+    .corner-tr::before { top: 0; right: 0; width: 20px; height: 3px; }
+    .corner-tr::after { top: 0; right: 0; width: 3px; height: 20px; }
     .corner-bl { bottom: 10px; left: 10px; }
-    .corner-bl::before { bottom: 0; left: 0; width: 22px; height: 3px; }
-    .corner-bl::after { bottom: 0; left: 0; width: 3px; height: 22px; }
-
+    .corner-bl::before { bottom: 0; left: 0; width: 20px; height: 3px; }
+    .corner-bl::after { bottom: 0; left: 0; width: 3px; height: 20px; }
     .corner-br { bottom: 10px; right: 10px; }
-    .corner-br::before { bottom: 0; right: 0; width: 22px; height: 3px; }
-    .corner-br::after { bottom: 0; right: 0; width: 3px; height: 22px; }
+    .corner-br::before { bottom: 0; right: 0; width: 20px; height: 3px; }
+    .corner-br::after { bottom: 0; right: 0; width: 3px; height: 20px; }
 
-    .antique-frame.shake {
-      animation: trapShake 0.44s cubic-bezier(.36,.07,.19,.97) both;
-    }
-
+    .antique-frame.shake { animation: trapShake 0.45s cubic-bezier(.36,.07,.19,.97) both; }
     @keyframes trapShake {
-      10%, 90% { transform: translate3d(-3px, 0, 0); }
-      20%, 80% { transform: translate3d(5px, 0, 0); }
-      30%, 50%, 70% { transform: translate3d(-7px, 0, 0); }
-      40%, 60% { transform: translate3d(7px, 0, 0); }
+      10%, 90% { transform: translate3d(-4px, 0, 0); }
+      20%, 80% { transform: translate3d(6px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-8px, 0, 0); }
+      40%, 60% { transform: translate3d(8px, 0, 0); }
     }
 
-    /* ヘッダー（時計文字盤風のエンブレム） */
+    /* ヘッダー */
     header {
       text-align: center;
-      padding-bottom: 14px;
-      margin-bottom: 16px;
-      position: relative;
+      padding-bottom: 10px;
+      margin-bottom: 12px;
     }
 
-    header::after {
-      content: "❖ ─────── ⚙ ─────── ❖";
-      display: block;
-      margin-top: 10px;
-      font-size: 0.78rem;
-      letter-spacing: 0.2em;
-      color: var(--brass-primary);
+    .top-utility-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
     }
+
+    .utility-left, .utility-right {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .meta-gear-pill {
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: #fffaf0;
+      background: linear-gradient(180deg, #5e4124 0%, #3b2714 100%);
+      border: 1px solid var(--brass-light);
+      padding: 3px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .mode-switch-btn {
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: bold;
+      padding: 3px 11px;
+      border-radius: 999px;
+      cursor: pointer;
+      border: 1px solid var(--border-antique);
+      background: #fffdf8;
+      color: var(--ink-dark);
+    }
+
+    .mode-switch-btn.locked-mode {
+      opacity: 0.65;
+      background: #e5dccb;
+      color: var(--ink-muted);
+    }
+
+    .mode-switch-btn.abyss-active {
+      background: linear-gradient(180deg, #6c3483 0%, #4a235a 100%);
+      border-color: #d7bde2;
+      color: #fff;
+      box-shadow: 0 0 10px rgba(142, 68, 173, 0.45);
+    }
+
+    .mini-util-btn {
+      font-family: inherit;
+      font-size: 0.74rem;
+      font-weight: bold;
+      color: var(--ink-dark);
+      background: #f5ebd6;
+      border: 1px solid var(--border-antique);
+      padding: 3px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    .mini-util-btn:hover { background: #e8d5b1; }
 
     .subtitle-badge {
       display: inline-block;
-      font-size: 0.72rem;
-      letter-spacing: 0.22em;
+      font-size: 0.68rem;
+      letter-spacing: 0.24em;
       color: #fffaf0;
       background: linear-gradient(180deg, #4b3321 0%, #2c1d12 100%);
       border: 1px solid var(--brass-light);
-      padding: 3px 16px;
+      padding: 2px 16px;
       border-radius: 999px;
-      margin-bottom: 8px;
-      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      margin-bottom: 4px;
+    }
+
+    body.abyss-theme .subtitle-badge {
+      background: linear-gradient(180deg, #5b2c6f 0%, #2c1338 100%);
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(1.35rem, 4.2vw, 1.9rem);
+      font-size: clamp(1.45rem, 4.2vw, 1.95rem);
       color: var(--ink-dark);
-      letter-spacing: 0.08em;
-      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
+      letter-spacing: 0.12em;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.85);
     }
 
-    .header-desc {
-      margin: 4px 0 0;
-      font-size: 0.88rem;
-      color: var(--ink-muted);
-    }
-
-    /* 重厚な真鍮プレート風HUDバー */
+    /* HUDバー */
     .hud-bar {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
       background: linear-gradient(180deg, #3a2719 0%, #261910 100%);
       border: 1px solid var(--brass-light);
       border-radius: var(--radius-md);
-      padding: 10px 16px;
-      margin-bottom: 14px;
+      padding: 9px 14px;
+      margin-bottom: 10px;
       color: #fcf6e8;
-      box-shadow: 0 4px 12px rgba(24, 15, 8, 0.25);
+    }
+
+    body.abyss-theme .hud-bar {
+      background: linear-gradient(180deg, #2e183b 0%, #1c0d26 100%);
     }
 
     .floor-info {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 8px;
       flex-wrap: wrap;
     }
 
@@ -234,113 +294,170 @@
       background: linear-gradient(180deg, var(--brass-shine) 0%, var(--brass-primary) 100%);
       color: #1f1309;
       font-weight: bold;
-      font-size: 0.94rem;
-      padding: 4px 13px;
+      font-size: 0.9rem;
+      padding: 3px 11px;
       border-radius: var(--radius-sm);
-      letter-spacing: 0.06em;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 2px 4px rgba(0, 0, 0, 0.35);
     }
 
-    .tier-label {
-      font-size: 0.88rem;
-      color: #e6d3b1;
-      letter-spacing: 0.04em;
+    .room-type-tag {
+      font-size: 0.78rem;
+      padding: 2px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(214, 173, 96, 0.5);
+      background: rgba(255, 255, 255, 0.08);
+      color: #f3e2c1;
+    }
+
+    .hud-right-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .gold-pill {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: var(--brass-shine);
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid rgba(214, 173, 96, 0.45);
+      padding: 3px 10px;
+      border-radius: 999px;
     }
 
     .hp-display {
       display: flex;
       align-items: center;
-      gap: 8px;
-      background: rgba(15, 9, 5, 0.55);
+      gap: 6px;
+      background: rgba(15, 9, 5, 0.6);
       border: 1px solid rgba(214, 173, 96, 0.5);
-      padding: 4px 14px;
+      padding: 3px 12px;
       border-radius: 999px;
-      font-size: 0.86rem;
-      color: #e6d3b1;
+      font-size: 0.82rem;
     }
 
     .hearts {
       display: inline-flex;
-      gap: 4px;
-      font-size: 1.15rem;
+      gap: 3px;
+      font-size: 1.08rem;
       line-height: 1;
     }
+    .heart-full { color: #e04848; text-shadow: 0 0 8px rgba(224, 72, 72, 0.65); }
+    .heart-empty { color: #5c4938; }
 
-    .heart-full {
-      color: #e04848;
-      text-shadow: 0 0 8px rgba(224, 72, 72, 0.65);
-      transition: transform 0.25s ease;
-    }
-
-    .heart-empty {
-      color: #5c4938;
-    }
-
-    /* 登頂プログレスゲージ（1〜20階ミニバー） */
-    .tower-progress-wrap {
-      margin-bottom: 14px;
-    }
-
-    .progress-track {
-      display: grid;
-      grid-template-columns: repeat(20, 1fr);
-      gap: 3px;
-      background: #e5d5b7;
-      padding: 4px;
-      border-radius: 6px;
+    /* パッシブ遺物＆消耗品バー */
+    .build-panel {
+      background: rgba(239, 226, 200, 0.65);
       border: 1px solid var(--border-antique);
+      border-radius: var(--radius-md);
+      padding: 9px 12px;
+      margin-bottom: 12px;
     }
 
-    .progress-pip {
-      height: 8px;
-      border-radius: 2px;
-      background: #cbb692;
-      position: relative;
-      transition: background-color 0.25s ease;
+    body.abyss-theme .build-panel {
+      background: rgba(230, 214, 242, 0.65);
     }
 
-    .progress-pip.heal-pip {
-      background: #9ec4ad;
+    .build-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
     }
 
-    .progress-pip.cleared {
-      background: var(--brass-primary);
+    .passive-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+      flex: 1;
     }
 
-    .progress-pip.current {
-      background: var(--accent-crimson);
-      box-shadow: 0 0 6px rgba(143, 34, 34, 0.6);
+    .passive-label {
+      font-size: 0.75rem;
+      font-weight: bold;
+      color: var(--brass-dark);
     }
 
-    /* 回復スポットバナー */
-    .sanctuary-banner {
+    .relic-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #fffdf8;
+      border: 1px solid var(--brass-primary);
+      border-radius: 6px;
+      padding: 2px 8px;
+      font-size: 0.76rem;
+      font-weight: bold;
+      color: var(--ink-dark);
+      cursor: help;
+    }
+
+    .relic-chip.cursed {
+      background: #35193d;
+      border-color: #b777d6;
+      color: #f6e8fc;
+    }
+
+    .consumable-group {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .use-item-btn {
+      font-family: inherit;
+      font-size: 0.75rem;
+      font-weight: bold;
+      background: linear-gradient(180deg, #fffdf8 0%, #ead8b5 100%);
+      border: 1px solid var(--brass-dark);
+      border-radius: 6px;
+      padding: 4px 9px;
+      cursor: pointer;
+      color: var(--ink-dark);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .use-item-btn:hover:not(:disabled) { background: #dfc798; }
+    .use-item-btn:disabled { opacity: 0.42; cursor: not-allowed; }
+
+    /* 環境モディファイアバナー */
+    .modifier-banner {
       display: none;
-      background: linear-gradient(180deg, #ebf7f0 0%, #d8eee1 100%);
+      border-radius: var(--radius-sm);
+      padding: 7px 12px;
+      margin-bottom: 10px;
+      font-size: 0.83rem;
+      font-weight: bold;
+      align-items: center;
+      gap: 8px;
+    }
+    .modifier-banner.show { display: flex; }
+    .modifier-curse {
+      background: #f5ebf8;
+      border: 1px solid #7d3c98;
+      border-left: 5px solid #5b2c6f;
+      color: #4a235a;
+    }
+    .modifier-blessing {
+      background: #ebf7f0;
       border: 1px solid var(--accent-emerald);
       border-left: 5px solid var(--accent-emerald);
       color: #164429;
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
-      margin-bottom: 14px;
-      font-size: 0.92rem;
-      font-weight: bold;
-      box-shadow: 0 3px 10px rgba(31, 92, 57, 0.12);
     }
 
-    .sanctuary-banner.show {
-      display: block;
-      animation: fadeIn 0.3s ease;
-    }
-
-    /* 羊皮紙の碑文・条件カード（高コントラストで読みやすさ最優先） */
+    /* 碑文カード */
     .story-box {
       background: #fffdf8;
       border: 1px solid var(--border-antique);
       border-top: 3px solid var(--brass-primary);
       border-radius: var(--radius-md);
-      padding: 16px 18px;
-      margin-bottom: 18px;
-      box-shadow: 0 4px 14px rgba(42, 28, 20, 0.08);
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 12px rgba(42, 28, 20, 0.07);
     }
 
     .problem-header-row {
@@ -352,109 +469,91 @@
     }
 
     .problem-title {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       font-weight: bold;
       margin: 0;
       color: var(--brass-dark);
     }
 
-    .key-count-pill {
-      font-size: 0.76rem;
-      font-weight: bold;
-      color: var(--ink-muted);
-      background: var(--bg-card);
-      border: 1px solid var(--border-antique);
-      padding: 2px 10px;
-      border-radius: 999px;
-      white-space: nowrap;
-    }
-
-    .problem-text {
-      margin: 0 0 12px;
-      font-size: 0.95rem;
-      color: var(--ink-dark);
-    }
-
     .clues-list {
       list-style: none;
-      margin: 0;
+      margin: 8px 0 0;
       padding: 0;
       display: grid;
-      gap: 8px;
+      gap: 7px;
     }
 
     .clues-list li {
       background: #f7eedc;
       border: 1px solid rgba(154, 108, 40, 0.38);
       border-radius: var(--radius-sm);
-      padding: 9px 12px;
-      font-size: 0.95rem;
+      padding: 8px 11px;
+      font-size: 0.92rem;
       color: #1f140d;
       display: flex;
       align-items: flex-start;
-      gap: 10px;
+      gap: 9px;
+      cursor: pointer;
+      user-select: none;
     }
 
-    /* 封蝋（ワックスシール）風の条件番号バッジ */
+    body.abyss-theme .clues-list li {
+      background: #f3eaf8;
+      border-color: rgba(125, 60, 152, 0.35);
+    }
+
+    .clues-list li.checked-clue { opacity: 0.52; text-decoration: line-through; }
+
     .clue-seal {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 24px;
-      height: 24px;
+      min-width: 22px;
+      height: 22px;
       border-radius: 50%;
       background: radial-gradient(circle at 35% 35%, #b53838, #781919);
-      border: 1px solid #e09f9f;
       color: #fffaf0;
-      font-size: 0.78rem;
+      font-size: 0.74rem;
       font-weight: bold;
-      margin-top: 1px;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     }
 
-    /* ベルベット調の鍵展示台座 */
+    /* 鍵台座 */
     .workspace {
       background: linear-gradient(180deg, #321f19 0%, #231510 100%);
       border: 2px solid var(--brass-primary);
       border-radius: var(--radius-lg);
-      padding: 16px 14px 18px;
-      margin-bottom: 16px;
-      box-shadow: inset 0 4px 18px rgba(0, 0, 0, 0.65), 0 6px 16px rgba(35, 21, 16, 0.22);
+      padding: 14px 13px 16px;
+      margin-bottom: 14px;
+      box-shadow: inset 0 4px 18px rgba(0, 0, 0, 0.65);
+    }
+
+    body.abyss-theme .workspace {
+      background: linear-gradient(180deg, #271433 0%, #180b21 100%);
     }
 
     .workspace-header {
       display: flex;
-      align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
-      gap: 6px;
-      margin-bottom: 12px;
+      gap: 4px;
+      margin-bottom: 10px;
       padding: 0 4px;
     }
 
-    .workspace-label {
-      font-size: 0.86rem;
-      font-weight: bold;
-      color: #f3e2c1;
-    }
-
-    .workspace-sub {
-      font-size: 0.76rem;
-      color: #cbb48e;
-    }
+    .workspace-label { font-size: 0.84rem; font-weight: bold; color: #f3e2c1; }
+    .workspace-sub { font-size: 0.74rem; color: #cbb48e; }
 
     .keys-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(134px, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(auto-fit, minmax(124px, 1fr));
+      gap: 9px;
     }
 
-    /* 鍵カード（視認性の高い象牙色プレート＋真鍮枠） */
     .key-card {
       background: linear-gradient(180deg, #fffdf9 0%, #f1e3c6 100%);
       border: 2px solid #9e7840;
       border-radius: var(--radius-md);
-      padding: 10px 8px 9px;
+      padding: 9px 7px 8px;
       color: var(--ink-dark);
       cursor: pointer;
       display: flex;
@@ -463,42 +562,37 @@
       text-align: center;
       position: relative;
       box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
-      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, opacity 0.18s ease;
+      transition: transform 0.15s ease, border-color 0.15s ease, opacity 0.18s ease;
       user-select: none;
     }
 
     .key-card:hover:not(.locked-card) {
       transform: translateY(-3px);
       border-color: var(--brass-shine);
-      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5), 0 0 12px rgba(214, 173, 96, 0.35);
     }
 
     .key-card.selected {
       border-color: #d94343;
       background: linear-gradient(180deg, #fff9f7 0%, #fae3dc 100%);
       transform: translateY(-3px);
-      box-shadow:
-        0 0 0 3px rgba(217, 67, 67, 0.45),
-        0 10px 20px rgba(0, 0, 0, 0.55);
+      box-shadow: 0 0 0 3px rgba(217, 67, 67, 0.45), 0 10px 20px rgba(0, 0, 0, 0.55);
     }
 
     .key-card.selected::before {
       content: "選択中";
       position: absolute;
       top: -9px;
-      right: 8px;
+      right: 7px;
       background: var(--accent-crimson);
       color: #fff;
-      font-size: 0.68rem;
+      font-size: 0.65rem;
       font-weight: bold;
-      padding: 1px 8px;
+      padding: 1px 7px;
       border-radius: 999px;
-      border: 1px solid #f7caca;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .key-card.eliminated {
-      opacity: 0.44;
+      opacity: 0.42;
       background: #cfc2ab;
       border-style: dashed;
       border-color: #7d6b53;
@@ -509,833 +603,875 @@
     .key-card.correct-reveal {
       border-color: var(--accent-emerald);
       background: linear-gradient(180deg, #f2fbf6 0%, #d4eedf 100%);
-      box-shadow: 0 0 0 3px rgba(46, 125, 80, 0.5), 0 8px 20px rgba(0, 0, 0, 0.45);
+      box-shadow: 0 0 0 3px rgba(46, 125, 80, 0.5);
     }
 
     .pos-tag {
-      font-size: 0.74rem;
+      font-size: 0.72rem;
       font-weight: bold;
       color: var(--brass-dark);
       background: rgba(154, 108, 40, 0.16);
-      border: 1px solid rgba(154, 108, 40, 0.3);
-      padding: 1px 8px;
+      padding: 1px 7px;
       border-radius: 4px;
-      margin-bottom: 6px;
+      margin-bottom: 5px;
       width: 100%;
+      display: flex;
+      justify-content: space-between;
     }
 
     .key-emblem-ring {
-      width: 46px;
-      height: 46px;
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
       background: radial-gradient(circle at 30% 30%, #fffdf8, #e6d1a7);
       border: 1.5px solid var(--brass-primary);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin: 2px 0 6px;
-      box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8), 0 2px 4px rgba(42, 28, 20, 0.16);
+      margin: 2px 0 5px;
     }
 
-    .key-icon {
-      font-size: 1.5rem;
-      line-height: 1;
-    }
-
-    .key-name {
-      font-size: 0.94rem;
-      font-weight: bold;
-      color: #1f140d;
-      line-height: 1.3;
-    }
-
-    .key-sub {
-      font-size: 0.78rem;
-      color: #4f3a2c;
-      margin-top: 3px;
-      line-height: 1.35;
-    }
+    .key-icon { font-size: 1.38rem; line-height: 1; }
+    .key-name { font-size: 0.88rem; font-weight: bold; color: #1f140d; }
+    .key-sub { font-size: 0.74rem; color: #4f3a2c; margin-top: 2px; }
 
     .memo-toggle {
-      margin-top: 8px;
+      margin-top: 7px;
       width: 100%;
       font-family: inherit;
-      font-size: 0.74rem;
+      font-size: 0.71rem;
       font-weight: bold;
-      padding: 4px 6px;
+      padding: 3px 5px;
       border-radius: 4px;
       border: 1px solid var(--border-antique);
       background: rgba(255, 253, 248, 0.85);
       color: var(--ink-muted);
       cursor: pointer;
-      transition: background-color 0.15s ease, color 0.15s ease;
     }
 
-    .memo-toggle:hover:not(:disabled) {
-      background: #e9d7b5;
-      color: var(--ink-dark);
-    }
-
-    .memo-toggle:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    /* 判定フィードバックバナー */
+    /* 判定バナー */
     .message-banner {
       display: none;
       border-radius: var(--radius-md);
-      padding: 13px 16px;
-      margin-bottom: 16px;
-      font-size: 0.94rem;
+      padding: 12px 15px;
+      margin-bottom: 14px;
+      font-size: 0.91rem;
       font-weight: bold;
-      line-height: 1.6;
-      animation: fadeIn 0.25s ease;
+      line-height: 1.55;
     }
+    .message-banner.show { display: block; }
+    .message-warning { background: #fef5e7; border: 1.5px solid #c86d1f; color: #7a3b08; }
+    .message-trap { background: #fdf0ef; border: 2px solid var(--accent-crimson); color: #7d1818; }
+    .message-success { background: #edf9f2; border: 2px solid var(--accent-emerald); color: #15472a; }
+    .message-hint { background: #f8f2e4; border: 1.5px solid var(--brass-primary); color: var(--ink-dark); font-weight: normal; }
+    .message-relic { background: #eef4fc; border: 1.5px solid var(--accent-royal); color: #173254; }
 
-    .message-banner.show {
-      display: block;
-    }
-
-    .message-warning {
-      background: #fef5e7;
-      border: 1.5px solid #c86d1f;
-      color: #7a3b08;
-    }
-
-    .message-trap {
-      background: #fdf0ef;
-      border: 2px solid var(--accent-crimson);
-      color: #7d1818;
-      box-shadow: 0 4px 12px rgba(143, 34, 34, 0.14);
-    }
-
-    .message-success {
-      background: #edf9f2;
-      border: 2px solid var(--accent-emerald);
-      color: #15472a;
-      box-shadow: 0 4px 12px rgba(31, 92, 57, 0.14);
-    }
-
-    .message-hint {
-      background: #f8f2e4;
-      border: 1.5px solid var(--brass-primary);
-      color: var(--ink-dark);
-      font-weight: normal;
-    }
-
-    /* アクションボタン群（真鍮レリーフボタン） */
+    /* アクションボタン */
     .actions-row {
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
-      gap: 10px;
+      gap: 9px;
     }
 
     .btn {
       appearance: none;
       font-family: inherit;
-      font-size: 0.94rem;
+      font-size: 0.91rem;
       font-weight: bold;
-      padding: 11px 22px;
+      padding: 10px 18px;
       border-radius: var(--radius-sm);
       cursor: pointer;
       border: 1.5px solid transparent;
-      transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.15s ease;
-      min-height: 46px;
-      letter-spacing: 0.04em;
-    }
-
-    .btn:active:not(:disabled) {
-      transform: translateY(1px);
+      min-height: 44px;
     }
 
     .btn-primary {
       background: linear-gradient(180deg, var(--brass-shine) 0%, var(--brass-primary) 100%);
       border-color: var(--brass-dark);
       color: #1f1309;
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 10px rgba(87, 56, 14, 0.32);
     }
-
-    .btn-primary:hover:not(:disabled) {
-      filter: brightness(1.05);
+    body.abyss-theme .btn-primary {
+      color: #fff;
     }
-
-    .btn-primary:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 
     .btn-secondary {
       background: linear-gradient(180deg, #fffdf8 0%, #efe1c6 100%);
       border-color: var(--border-antique);
       color: var(--ink-dark);
-      box-shadow: 0 2px 6px rgba(42, 28, 20, 0.1);
-    }
-
-    .btn-secondary:hover:not(:disabled) {
-      background: #e8d5b2;
     }
 
     .btn-next {
       background: linear-gradient(180deg, var(--accent-emerald-light) 0%, var(--accent-emerald) 100%);
       border-color: #123b23;
       color: #fffdf8;
-      box-shadow: 0 4px 12px rgba(31, 92, 57, 0.35);
     }
 
-    .btn-next:hover {
-      filter: brightness(1.06);
+    .btn-abyss {
+      background: linear-gradient(180deg, #8e44ad 0%, #5b2c6f 100%);
+      border-color: #2c1338;
+      color: #fffdf8;
+      box-shadow: 0 4px 14px rgba(91, 44, 111, 0.45);
     }
 
     .btn-danger {
       background: linear-gradient(180deg, var(--accent-crimson-light) 0%, var(--accent-crimson) 100%);
       border-color: #541010;
       color: #fffdf8;
-      box-shadow: 0 4px 12px rgba(143, 34, 34, 0.35);
     }
 
-    /* 階層見取り図ドロワー */
-    .tower-drawer {
-      margin-top: 18px;
-      border-top: 1px solid rgba(154, 108, 40, 0.4);
-      padding-top: 12px;
-    }
-
-    .tower-drawer summary {
-      cursor: pointer;
-      font-size: 0.85rem;
-      font-weight: bold;
-      color: var(--brass-dark);
-      text-align: center;
-      user-select: none;
-      list-style: none;
-    }
-
-    .tower-drawer summary::-webkit-details-marker {
+    /* モーダル */
+    .modal-overlay {
       display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      background: rgba(12, 8, 5, 0.82);
+      backdrop-filter: blur(3px);
+      align-items: center;
+      justify-content: center;
+      padding: 14px;
+      overflow-y: auto;
     }
+    .modal-overlay.show { display: flex; }
 
-    .floor-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 6px;
-      margin-top: 10px;
-    }
-
-    .floor-node {
-      font-size: 0.76rem;
+    .modal-box {
+      background: linear-gradient(180deg, #fdfaf2 0%, #f1e2c4 100%);
+      border: 3px solid var(--brass-primary);
+      outline: 3px solid #2c1c10;
+      outline-offset: -7px;
+      border-radius: var(--radius-lg);
+      max-width: 620px;
+      width: 100%;
+      padding: 24px 20px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.8);
       text-align: center;
-      padding: 5px 2px;
-      border-radius: 5px;
-      border: 1px solid var(--border-antique);
-      background: #fffdf8;
+    }
+
+    .modal-title {
+      margin: 0 0 6px;
+      font-size: 1.25rem;
+      color: var(--brass-dark);
+    }
+
+    .modal-sub {
+      margin: 0 0 16px;
+      font-size: 0.88rem;
       color: var(--ink-muted);
     }
 
-    .floor-node.heal {
-      border-color: var(--accent-emerald);
-      color: var(--accent-emerald);
-      font-weight: bold;
-      background: #eff9f3;
+    .choice-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 10px;
+      margin-bottom: 14px;
     }
 
-    .floor-node.cleared {
-      background: var(--brass-primary);
-      color: #fffdf8;
+    .choice-card {
+      background: #fffdf8;
+      border: 2px solid var(--border-antique);
+      border-radius: var(--radius-md);
+      padding: 14px 12px;
+      cursor: pointer;
+      text-align: center;
+      transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .choice-card:hover {
+      transform: translateY(-3px);
       border-color: var(--brass-dark);
+      box-shadow: 0 8px 18px rgba(42, 28, 20, 0.18);
     }
 
-    .floor-node.current {
-      outline: 2px solid var(--accent-crimson);
+    .choice-card.curse-route {
+      border-color: #7d3c98;
+      background: #faf4fc;
+    }
+
+    .choice-card.sanctuary-route {
+      border-color: var(--accent-emerald);
+      background: #f2fbf6;
+    }
+
+    .choice-icon { font-size: 1.9rem; margin-bottom: 6px; }
+    .choice-name { font-size: 0.96rem; font-weight: bold; color: var(--ink-dark); margin-bottom: 5px; }
+    .choice-desc { font-size: 0.8rem; color: var(--ink-muted); line-height: 1.45; }
+    .choice-tag {
+      display: inline-block;
+      margin-top: 8px;
+      font-size: 0.7rem;
       font-weight: bold;
-      color: var(--ink-dark);
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(154, 108, 40, 0.16);
+      color: var(--brass-dark);
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-4px); }
-      to { opacity: 1; transform: translateY(0); }
+    .upgrade-list {
+      display: grid;
+      gap: 8px;
+      text-align: left;
+      margin-bottom: 16px;
     }
 
-    @media (max-width: 520px) {
-      .app-shell {
-        padding: 10px 8px 28px;
-      }
-      .antique-frame {
-        padding: 20px 14px 18px;
-        outline-offset: -5px;
-      }
-      .keys-grid {
-        grid-template-columns: repeat(2, 1fr);
-      }
-      .btn {
-        width: 100%;
-      }
-      .floor-grid {
-        grid-template-columns: repeat(4, 1fr);
-      }
+    .upgrade-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      background: #fffdf8;
+      border: 1px solid var(--border-antique);
+      border-radius: 8px;
+      padding: 10px 12px;
+    }
+
+    .upgrade-info-title { font-weight: bold; font-size: 0.92rem; color: var(--ink-dark); }
+    .upgrade-info-desc { font-size: 0.78rem; color: var(--ink-muted); }
+
+    @media (max-width: 540px) {
+      .antique-frame { padding: 18px 12px 18px; outline-offset: -5px; }
+      .keys-grid { grid-template-columns: repeat(2, 1fr); }
+      .btn { width: 100%; }
     }
   </style>
 </head>
 <body>
-  <!-- 背景の精密歯車装飾 -->
   <div class="bg-gear-layer" aria-hidden="true">
     <svg class="bg-gear gear-left" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="34" />
       <circle cx="50" cy="50" r="24" stroke-dasharray="4 3" />
       <circle cx="50" cy="50" r="10" />
-      <path d="M50 6 V16 M50 84 V94 M6 50 H16 M84 50 H94 M19 19 L26 26 M74 74 L81 81 M81 19 L74 26 M26 74 L19 81" stroke-width="3" />
     </svg>
     <svg class="bg-gear gear-right" viewBox="0 0 100 100">
       <circle cx="50" cy="50" r="38" />
       <circle cx="50" cy="50" r="28" stroke-dasharray="3 4" />
       <circle cx="50" cy="50" r="12" />
-      <path d="M50 4 V14 M50 86 V96 M4 50 H14 M86 50 H96 M17 17 L25 25 M75 75 L83 83 M83 17 L75 25 M25 75 L17 83" stroke-width="3" />
     </svg>
   </div>
 
   <div class="app-shell">
-    <main class="antique-frame" id="mainFrame" role="main" aria-labelledby="app-title">
-      <div class="corner-plate corner-tl" aria-hidden="true"></div>
-      <div class="corner-plate corner-tr" aria-hidden="true"></div>
-      <div class="corner-plate corner-bl" aria-hidden="true"></div>
-      <div class="corner-plate corner-br" aria-hidden="true"></div>
+    <main class="antique-frame" id="mainFrame" role="main">
+      <div class="corner-plate corner-tl"></div>
+      <div class="corner-plate corner-tr"></div>
+      <div class="corner-plate corner-bl"></div>
+      <div class="corner-plate corner-br"></div>
 
       <header>
-        <div class="subtitle-badge">THE TWENTY-STORY CLOCKTOWER</div>
-        <h1 id="app-title">鍵のかかった時計塔</h1>
-        <p class="header-desc">台座に並ぶ鍵から本物の1本を見極め、最上階（20階）の扉を開け。</p>
+        <div class="top-utility-bar">
+          <div class="utility-left">
+            <button type="button" class="meta-gear-pill" id="openWorkshopBtn">⚙️ 時計技師の工房（歯車: 0）</button>
+            <button type="button" class="mode-switch-btn" id="modeSwitchBtn">🔒 逆さまのバベル（20層制覇で解放）</button>
+          </div>
+          <div class="utility-right">
+            <button type="button" class="mini-util-btn" id="newRunTopBtn">↻ 最初から</button>
+            <button type="button" class="mini-util-btn" id="soundToggleBtn">🔊 音 ON</button>
+          </div>
+        </div>
+        <div class="subtitle-badge" id="subtitleBadge">BABEL OF BLACK KEYS</div>
+        <h1 id="mainTitle">黒鍵のバベル</h1>
       </header>
 
-      <section class="hud-bar" aria-label="探索ステータス">
+      <section class="hud-bar">
         <div class="floor-info">
-          <span class="floor-badge" id="floorBadge">第 1 階 / 20 階</span>
-          <span class="tier-label" id="tierLabel">序層：試練の入口</span>
+          <span class="floor-badge" id="floorBadge">第 1 層 / 20 層</span>
+          <span class="room-type-tag" id="roomTypeTag">⚔️ 試練の扉</span>
         </div>
-        <div class="hp-display" aria-label="残り体力">
-          <span>体力</span>
-          <span class="hearts" id="heartsDisplay"></span>
+        <div class="hud-right-group">
+          <span class="gold-pill" id="goldPill">💰 0 G</span>
+          <div class="hp-display">
+            <span>体力</span>
+            <span class="hearts" id="heartsDisplay"></span>
+          </div>
         </div>
       </section>
 
-      <div class="tower-progress-wrap" aria-label="登頂進捗ゲージ">
-        <div class="progress-track" id="progressTrack"></div>
-      </div>
+      <!-- ビルド＆消耗品パネル -->
+      <section class="build-panel">
+        <div class="build-row">
+          <div class="passive-list" id="passiveList">
+            <span class="passive-label">所持遺物：</span>
+          </div>
+          <div class="consumable-group">
+            <button type="button" class="use-item-btn" id="useMonocleBtn">👁️ 単眼鏡 (<span id="cntMonocle">1</span>)</button>
+            <button type="button" class="use-item-btn" id="useElixirBtn">🧪 霊薬 (<span id="cntElixir">1</span>)</button>
+          </div>
+        </div>
+      </section>
 
-      <div class="sanctuary-banner" id="sanctuaryBanner" role="status"></div>
+      <div class="modifier-banner" id="modifierBanner"></div>
 
-      <section class="story-box" aria-live="polite">
+      <section class="story-box">
         <div class="problem-header-row">
           <h2 class="problem-title" id="problemTitle"></h2>
-          <span class="key-count-pill" id="keyCountPill"></span>
+          <span style="font-size:0.74rem; color:var(--ink-muted);" id="comboText">連続一発: 0</span>
         </div>
-        <p class="problem-text" id="problemText"></p>
+        <p style="margin:0 0 6px; font-size:0.92rem;" id="problemText"></p>
         <ul class="clues-list" id="cluesList"></ul>
       </section>
 
-      <section class="workspace" aria-label="鍵の選択台座">
+      <section class="workspace">
         <div class="workspace-header">
-          <span class="workspace-label">扉に差し込む「本物の鍵」を1本選択</span>
-          <span class="workspace-sub">偽物だと思う鍵は「除外メモ」で伏せられます</span>
+          <span class="workspace-label">本物の鍵を1本選択して扉へ差し込め</span>
+          <span class="workspace-sub">条件文タップで斜線メモ可 / 数字キー[1〜9]対応</span>
         </div>
         <div class="keys-grid" id="keysGrid"></div>
       </section>
 
-      <div id="feedbackBanner" class="message-banner" role="alert"></div>
+      <div id="feedbackBanner" class="message-banner"></div>
 
-      <div class="actions-row" id="actionsRow">
+      <div class="actions-row">
         <button type="button" class="btn btn-primary" id="unlockBtn">この鍵を扉に差し込む</button>
         <button type="button" class="btn btn-secondary" id="hintBtn">手がかりの助言</button>
-        <button type="button" class="btn btn-secondary" id="clearMemoBtn">除外メモを戻す</button>
-        <button type="button" class="btn btn-next" id="nextBtn" style="display:none;">上の階へ進む ▶</button>
-        <button type="button" class="btn btn-danger" id="restartBtn" style="display:none;">1階からやり直す</button>
+        <button type="button" class="btn btn-secondary" id="clearMemoBtn">メモをリセット</button>
+        <button type="button" class="btn btn-next" id="nextRouteBtn" style="display:none;">次の扉を選ぶ ▶</button>
+        <button type="button" class="btn btn-abyss" id="challengeAbyssBtn" style="display:none;">🔮 高難度「逆さまのバベル」へ挑む</button>
+        <button type="button" class="btn btn-danger" id="restartBtn" style="display:none;">新たな探索を始める</button>
       </div>
-
-      <details class="tower-drawer">
-        <summary>▾ 時計塔の構造図（全20階・回復スポット一覧） ▾</summary>
-        <div class="floor-grid" id="floorGrid"></div>
-      </details>
     </main>
+  </div>
+
+  <!-- 報酬・ルート選択モーダル -->
+  <div class="modal-overlay" id="choiceModal">
+    <div class="modal-box">
+      <h2 class="modal-title" id="choiceModalTitle">戦利品の選択</h2>
+      <p class="modal-sub" id="choiceModalSub">塔の仕掛けを突破した。報酬を1つ選び取れ。</p>
+      <div class="choice-grid" id="choiceGrid"></div>
+      <button type="button" class="btn btn-secondary" id="skipChoiceBtn" style="display:none;">何も取らずに先へ進む</button>
+    </div>
+  </div>
+
+  <!-- 時計技師の工房（メタ成長）モーダル -->
+  <div class="modal-overlay" id="workshopModal">
+    <div class="modal-box">
+      <h2 class="modal-title">⚙️ 時計技師の工房（永続強化）</h2>
+      <p class="modal-sub" id="workshopGearText">探索で集めた「魔導の歯車」を消費し、次回以降の探索を永久に強化します。</p>
+      <div class="upgrade-list" id="upgradeList"></div>
+      <button type="button" class="btn btn-primary" id="closeWorkshopBtn">閉じる</button>
+    </div>
   </div>
 
   <script>
     (function () {
       "use strict";
 
-      const MAX_HP = 3;
+      const TOTAL_FLOORS = 20;
+      const META_KEY = "babel_black_keys_meta_v1";
 
-      const FLOORS = [
-        // --- 1〜5階：序層 ---
-        {
-          floor: 1,
-          tier: "序層：試練の入口",
-          title: "第1階：三本の鍵の台座",
-          text: "重厚な鉄扉の前に3本の鍵が左から並んでいます。本物の鍵は1本だけです。",
-          keys: [
-            { id: "k1", pos: "左端", name: "金の鍵", sub: "太陽の刻印", icon: "🔑" },
-            { id: "k2", pos: "中央", name: "銀の鍵", sub: "月の刻印", icon: "🗝️" },
-            { id: "k3", pos: "右端", name: "銅の鍵", sub: "星の刻印", icon: "🔐" }
-          ],
-          clues: [
-            "「金の鍵」は、この扉の鍵ではない。",
-            "本物の扉の鍵は、「中央」には置かれていない。"
-          ],
-          answerId: "k3",
-          trapText: "鍵穴から鋭い針が飛び出した！偽物の鍵だったようだ。",
-          hint: "左端の金の鍵は偽物、中央の銀の鍵も位置の条件から除外されます。",
-          explanation: "金の鍵（左端）は偽物であり、本物は中央にもないため、右端の「銅の鍵」が正解です。"
-        },
-        {
-          floor: 2,
-          tier: "序層：試練の入口",
-          title: "第2階：左右の法則",
-          text: "大理石の台座に3本の鍵が並んでいます。刻まれた碑文を読み解いてください。",
-          keys: [
-            { id: "k1", pos: "1番目（左）", name: "古びた鉄鍵", sub: "錆びた柄", icon: "🗝️" },
-            { id: "k2", pos: "2番目（中央）", name: "白銀の鍵", sub: "滑らかな柄", icon: "🔑" },
-            { id: "k3", pos: "3番目（右）", name: "黒曜の鍵", sub: "冷たい柄", icon: "🗡️" }
-          ],
-          clues: [
-            "本物の鍵は、「黒曜の鍵」よりも左側に置かれている。",
-            "「錆びた柄」を持つ鍵は罠の鍵である。"
-          ],
-          answerId: "k2",
-          trapText: "罠が作動し、天井から重たい砂袋が落下した！",
-          hint: "「黒曜の鍵（3番目）より左側」にあるのは1番目と2番目です。そこから錆びた柄を除きましょう。",
-          explanation: "黒曜の鍵より左側（1番目・2番目）のうち、錆びた柄の1番目を除外した2番目の「白銀の鍵」が正解です。"
-        },
-        {
-          floor: 3,
-          tier: "序層：試練の入口",
-          title: "第3階：四本の紋章鍵",
-          text: "鍵の本数が4本に増えました。ダミーの罠鍵を見抜いてください。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "獅子の鍵", sub: "黄金製", icon: "🦁" },
-            { id: "k2", pos: "左から2", name: "鷲の鍵", sub: "白銀製", icon: "🦅" },
-            { id: "k3", pos: "左から3", name: "蛇の鍵", sub: "青銅製", icon: "🐍" },
-            { id: "k4", pos: "左から4", name: "鹿の鍵", sub: "黒鉄製", icon: "🦌" }
-          ],
-          clues: [
-            "本物の鍵は、両端（左から1・左から4）には置かれていない。",
-            "「青銅製」の鍵は扉を開けることができない。",
-            "「鷲の鍵」は本物の候補に残っている。"
-          ],
-          answerId: "k2",
-          trapText: "鍵を回した瞬間、床下から熱気が噴き出した！",
-          hint: "両端の1と4を除外すると、残りは2と3だけです。そこから青銅製を除きましょう。",
-          explanation: "両端（獅子・鹿）を除くと鷲と蛇が残り、青銅製の蛇を除外することで「鷲の鍵」が確定します。"
-        },
-        {
-          floor: 4,
-          tier: "序層：試練の入口",
-          title: "第4階：隣り合う罠",
-          text: "4本の鍵が並んでいます。位置関係を示す手がかりから本物を特定してください。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "紅玉の鍵", sub: "赤い宝石", icon: "♦️" },
-            { id: "k2", pos: "左から2", name: "蒼玉の鍵", sub: "青い宝石", icon: "🔷" },
-            { id: "k3", pos: "左から3", name: "翠玉の鍵", sub: "緑の宝石", icon: "❇️" },
-            { id: "k4", pos: "左から4", name: "琥珀の鍵", sub: "黄の宝石", icon: "🔶" }
-          ],
-          clues: [
-            "「紅玉の鍵」は偽物であり、そのすぐ隣にある鍵もまた偽物である。",
-            "本物の鍵は、右端（左から4）にはない。"
-          ],
-          answerId: "k3",
-          trapText: "宝石が砕け散り、閃光と衝撃が走った！",
-          hint: "左から1の紅玉が偽物なので、そのすぐ右隣（左から2）も偽物になります。",
-          explanation: "左から1（紅玉）とその隣（左から2・蒼玉）が除外され、右端（左から4）も除外されるため、左から3の「翠玉の鍵」が正解です。"
-        },
-        {
-          floor: 5,
-          tier: "第1休憩所：小聖堂",
-          title: "第5階：小聖堂の試練",
-          text: "5階の小聖堂に辿り着きました。ここにも4本の鍵が用意されています。",
-          healType: "partial",
-          keys: [
-            { id: "k1", pos: "1番目", name: "朝露の鍵", sub: "水晶の飾り", icon: "💧" },
-            { id: "k2", pos: "2番目", name: "木漏れ日の鍵", sub: "琥珀の飾り", icon: "🌿" },
-            { id: "k3", pos: "3番目", name: "夕凪の鍵", sub: "珊瑚の飾り", icon: "🌅" },
-            { id: "k4", pos: "4番目", name: "夜霧の鍵", sub: "真珠の飾り", icon: "🌫️" }
-          ],
-          clues: [
-            "本物の鍵は、「朝露の鍵」よりも右側に置かれている。",
-            "「珊瑚の飾り」と「真珠の飾り」を持つ鍵はどちらも偽物である。"
-          ],
-          answerId: "k2",
-          trapText: "聖堂の鐘が低く鳴り響き、見えない衝撃が襲った！",
-          hint: "1番目より右にあるのは2・3・4番目です。そのうち珊瑚と真珠を除くと1本だけ残ります。",
-          explanation: "1番目より右側（2・3・4番目）から、珊瑚（3番目）と真珠（4番目）を除いた2番目の「木漏れ日の鍵」が本物です。"
-        },
+      // --- 効果音エンジン ---
+      const SoundFX = (() => {
+        let ctx = null;
+        let enabled = true;
+        function ensure() {
+          if (!enabled) return null;
+          if (!ctx) {
+            const AC = window.AudioContext || window.webkitAudioContext;
+            if (AC) ctx = new AC();
+          }
+          if (ctx && ctx.state === "suspended") ctx.resume();
+          return ctx;
+        }
+        function tone(f, type, dur, delay = 0, vol = 0.1, endF = null) {
+          const a = ensure();
+          if (!a) return;
+          const t = a.currentTime + delay;
+          const o = a.createOscillator();
+          const g = a.createGain();
+          o.type = type;
+          o.frequency.setValueAtTime(f, t);
+          if (endF) o.frequency.exponentialRampToValueAtTime(endF, t + dur);
+          g.gain.setValueAtTime(0.001, t);
+          g.gain.linearRampToValueAtTime(vol, t + 0.01);
+          g.gain.exponentialRampToValueAtTime(0.0008, t + dur);
+          o.connect(g);
+          g.connect(a.destination);
+          o.start(t);
+          o.stop(t + dur + 0.02);
+        }
+        return {
+          toggle: () => { enabled = !enabled; return enabled; },
+          isEnabled: () => enabled,
+          select: () => tone(600, "triangle", 0.06, 0, 0.07),
+          memo: () => tone(310, "sine", 0.05, 0, 0.05),
+          unlock: () => {
+            tone(261.6, "triangle", 0.35, 0, 0.11);
+            tone(329.6, "triangle", 0.35, 0.06, 0.11);
+            tone(392.0, "triangle", 0.4, 0.12, 0.11);
+            tone(523.3, "sine", 0.55, 0.18, 0.13);
+          },
+          trap: () => {
+            tone(140, "sawtooth", 0.38, 0, 0.15, 45);
+            tone(90, "square", 0.34, 0.04, 0.13, 35);
+          },
+          relic: () => {
+            tone(523.3, "sine", 0.2, 0, 0.1);
+            tone(784.0, "triangle", 0.3, 0.08, 0.1);
+          }
+        };
+      })();
 
-        // --- 6〜10階：中層 ---
+      // --- パッシブ遺物マスターデータ ---
+      const RELIC_POOL = [
         {
-          floor: 6,
-          tier: "中層：歯車の回廊",
-          title: "第6階：五本の歯車鍵",
-          text: "ここから鍵が5本に増えます。慎重に偽物を切り分けてください。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "第一歯車の鍵", sub: "真鍮製", icon: "⚙️" },
-            { id: "k2", pos: "左から2", name: "第二歯車の鍵", sub: "白銀製", icon: "🔧" },
-            { id: "k3", pos: "左から3", name: "第三歯車の鍵", sub: "真鍮製", icon: "🔩" },
-            { id: "k4", pos: "左から4", name: "第四歯車の鍵", sub: "黒鉄製", icon: "🗝️" },
-            { id: "k5", pos: "左から5", name: "第五歯車の鍵", sub: "白銀製", icon: "🔑" }
-          ],
-          clues: [
-            "本物の鍵は「真鍮製」ではない。",
-            "本物の鍵は、ど真ん中（左から3）より左にはない。",
-            "「白銀製」の鍵のうち、右端にあるものは罠である。"
-          ],
-          answerId: "k4",
-          trapText: "歯車が逆回転し、鉄格子が激しく弾かれた！",
-          hint: "「ど真ん中より左にはない」ので候補は3・4・5番目。そのうち真鍮製（3番目）と右端の白銀製（5番目）を除きます。",
-          explanation: "左から3・4・5番目のうち、真鍮製（3）と右端の白銀製（5）を除外すると、左から4の「第四歯車の鍵」が残ります。"
+          id: "compass",
+          icon: "🧭",
+          name: "真鍮の羅針盤",
+          desc: "毎層の開始時、偽物の鍵1本を自動で看破して除外する。"
         },
         {
-          floor: 7,
-          tier: "中層：歯車の回廊",
-          title: "第7階：天秤の証言",
-          text: "5本の鍵の重さと位置に関する記録が残されています。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "羽毛の鍵", sub: "軽量・銀", icon: "🪶" },
-            { id: "k2", pos: "左から2", name: "砂時計の鍵", sub: "中量・金", icon: "⏳" },
-            { id: "k3", pos: "左から3", name: "分銅の鍵", sub: "重量・鉄", icon: "⚖️" },
-            { id: "k4", pos: "左から4", name: "羅針盤の鍵", sub: "中量・銅", icon: "🧭" },
-            { id: "k5", pos: "左から5", name: "錨の鍵", sub: "重量・鉛", icon: "⚓" }
-          ],
-          clues: [
-            "「重量」の鍵はすべて偽物である。",
-            "本物の鍵は「中量」ではない。",
-            "条件1と2を満たす鍵が1本だけ存在する。"
-          ],
-          answerId: "k1",
-          trapText: "天秤が大きく傾き、鋭い電撃が走った！",
-          hint: "重量（3・5番目）でも中量（2・4番目）でもない鍵を探してください。",
-          explanation: "重量（分銅・錨）と中量（砂時計・羅針盤）をすべて除外すると、軽量の「羽毛の鍵」のみが残ります。"
+          id: "vampire_ring",
+          icon: "🩸",
+          name: "吸血の鍵束",
+          desc: "「一発開錠」を3回達成するたび、最大HP+1＆HP1回復。"
         },
         {
-          floor: 8,
-          tier: "中層：歯車の回廊",
-          title: "第8階：鏡合わせの配置",
-          text: "5本の鍵が対称に並んでいます。本物はどれでしょうか。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "東風の鍵", sub: "風紋", icon: "🍃" },
-            { id: "k2", pos: "左から2", name: "西風の鍵", sub: "雲紋", icon: "☁️" },
-            { id: "k3", pos: "左から3", name: "南風の鍵", sub: "炎紋", icon: "🔥" },
-            { id: "k4", pos: "左から4", name: "北風の鍵", sub: "氷紋", icon: "❄️" },
-            { id: "k5", pos: "左から5", name: "無風の鍵", sub: "鏡紋", icon: "🪞" }
-          ],
-          clues: [
-            "「無風の鍵」のすぐ隣にある鍵は偽物である。",
-            "本物の鍵は、両端（左から1・左から5）にはない。",
-            "「炎紋」の鍵は扉を開けない。"
-          ],
-          answerId: "k2",
-          trapText: "鏡が割れ、冷たい突風が吹き荒れた！",
-          hint: "両端（1と5）が消え、5番目（無風）の隣である4番目も消え、さらに炎紋（3番目）も消えます。",
-          explanation: "1・5番目（両端）、4番目（無風の隣）、3番目（炎紋）を順に取り除くと、左から2の「西風の鍵」が確定します。"
+          id: "alchemist_lens",
+          icon: "🔬",
+          name: "錬金術師の単眼鏡",
+          desc: "「手がかりの助言」を使用しても、一発開錠ボーナスが途切れなくなる。"
         },
         {
-          floor: 9,
-          tier: "中層：歯車の回廊",
-          title: "第9階：嘘つきと正直者の刻印",
-          text: "5本の鍵の札にはそれぞれ主張が書かれていますが、本物の鍵の札だけが真実を語っています。",
-          keys: [
-            { id: "k1", pos: "1番目", name: "一の鍵", sub: "札「2番目が本物だ」", icon: "1️⃣" },
-            { id: "k2", pos: "2番目", name: "二の鍵", sub: "札「私は偽物だ」", icon: "2️⃣" },
-            { id: "k3", pos: "3番目", name: "三の鍵", sub: "札「私は1番目ではない」", icon: "3️⃣" },
-            { id: "k4", pos: "4番目", name: "四の鍵", sub: "札「5番目が本物だ」", icon: "4️⃣" },
-            { id: "k5", pos: "5番目", name: "五の鍵", sub: "札「私は4番目にある」", icon: "5️⃣" }
-          ],
-          clues: [
-            "5本の鍵のうち、本物は1本だけである。",
-            "「本物の鍵の札だけが真実」を述べており、偽物の鍵の札はすべて嘘をついている。"
-          ],
-          answerId: "k3",
-          trapText: "偽りの刻印が赤く光り、魔力の罠が炸裂した！",
-          hint: "「本物の札だけが真実」なので、本物が「私は偽物だ」と言うことはありません。また「他の鍵が本物だ」と言う札も矛盾します。",
-          explanation: "1番目・4番目は他者を本物と言っているため偽物、2番目は自己矛盾、5番目は位置が嘘。唯一真実を述べている「三の鍵」が正解です。"
+          id: "chrono_watch",
+          icon: "⏱️",
+          name: "狂気の懐中時計",
+          desc: "残りHPが1のとき、各層で最初のミスダメージを1度だけ無効化する。"
         },
         {
-          floor: 10,
-          tier: "第2休憩所：大聖堂",
-          title: "第10階：大聖堂の封印鍵",
-          text: "塔の中間地点・大聖堂です。5本の聖遺物の鍵から本物を見極めてください。",
-          healType: "full",
-          keys: [
-            { id: "k1", pos: "左から1", name: "聖杯の鍵", sub: "金・赤い紐", icon: "🏆" },
-            { id: "k2", pos: "左から2", name: "聖剣の鍵", sub: "銀・青い紐", icon: "⚔️" },
-            { id: "k3", pos: "左から3", name: "聖盾の鍵", sub: "金・青い紐", icon: "🛡️" },
-            { id: "k4", pos: "左から4", name: "聖杖の鍵", sub: "銀・赤い紐", icon: "🪄" },
-            { id: "k5", pos: "左から5", name: "聖冠の鍵", sub: "銅・白い紐", icon: "👑" }
-          ],
-          clues: [
-            "「金」でできた鍵はすべて偽物である。",
-            "「赤い紐」がついた鍵もすべて偽物である。",
-            "本物の鍵は右端（左から5）には置かれていない。"
-          ],
-          answerId: "k2",
-          trapText: "聖堂の床から閃光が放たれ、体力を奪われた！",
-          hint: "「金」の鍵（1・3番目）と「赤い紐」の鍵（1・4番目）、さらに右端（5番目）を除外しましょう。",
-          explanation: "金（1・3）、赤い紐（1・4）、右端（5）をすべて除外すると、銀で青い紐の「聖剣の鍵（左から2）」が残ります。"
-        },
-
-        // --- 11〜15階：上層 ---
-        {
-          floor: 11,
-          tier: "上層：星見の螺旋",
-          title: "第11階：六星座の鍵",
-          text: "上層へ足を踏み入れました。ダミーが増え、6本の鍵が並んでいます。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "牡羊の鍵", sub: "火の宮", icon: "♈" },
-            { id: "k2", pos: "左から2", name: "牡牛の鍵", sub: "地の宮", icon: "♉" },
-            { id: "k3", pos: "左から3", name: "双子の鍵", sub: "風の宮", icon: "♊" },
-            { id: "k4", pos: "左から4", name: "巨蟹の鍵", sub: "水の宮", icon: "♋" },
-            { id: "k5", pos: "左から5", name: "獅子の鍵", sub: "火の宮", icon: "♌" },
-            { id: "k6", pos: "左から6", name: "乙女の鍵", sub: "地の宮", icon: "♍" }
-          ],
-          clues: [
-            "「火の宮」と「地の宮」の鍵はすべて偽物である。",
-            "本物の鍵は、「巨蟹の鍵」よりも左側に置かれている。"
-          ],
-          answerId: "k3",
-          trapText: "星盤が狂い、無数の光の矢が降り注いだ！",
-          hint: "火の宮（1・5番目）と地の宮（2・6番目）を消すと、3番目と4番目だけが残ります。",
-          explanation: "火と地の宮を除くと3番目（双子）と4番目（巨蟹）が残り、巨蟹より左にある「双子の鍵」が正解となります。"
+          id: "merchant_pouch",
+          icon: "💰",
+          name: "強欲の革袋",
+          desc: "階層突破時の獲得ゴールドが +25G 増加する。"
         },
         {
-          floor: 12,
-          tier: "上層：星見の螺旋",
-          title: "第12階：偶数と素数の罠",
-          text: "1番から6番まで番号が振られた6本の鍵が並んでいます。",
-          keys: [
-            { id: "k1", pos: "1番", name: "壱号鍵", sub: "黒檀", icon: "🗝️" },
-            { id: "k2", pos: "2番", name: "弐号鍵", sub: "白樺", icon: "🔑" },
-            { id: "k3", pos: "3番", name: "参号鍵", sub: "黒檀", icon: "🗝️" },
-            { id: "k4", pos: "4番", name: "四号鍵", sub: "白樺", icon: "🔑" },
-            { id: "k5", pos: "5番", name: "伍号鍵", sub: "黒檀", icon: "🗝️" },
-            { id: "k6", pos: "6番", name: "六号鍵", sub: "白樺", icon: "🔑" }
-          ],
-          clues: [
-            "偶数番目（2・4・6番）にある鍵はすべて罠である。",
-            "本物の鍵は、「参号鍵」よりも右側に置かれている。"
-          ],
-          answerId: "k5",
-          trapText: "番号の刻印が爆発し、煙幕と衝撃に包まれた！",
-          hint: "偶数（2・4・6）を除くと1・3・5番が残ります。さらに「3番より右側」にあるのは1本だけです。",
-          explanation: "奇数番（1・3・5）のうち、3番よりも右側にあるのは「5番（伍号鍵）」だけです。"
+          id: "parity_scale",
+          icon: "⚖️",
+          name: "偶奇の天秤",
+          desc: "本物の鍵が「奇数番目」にある階では、開錠時に追加で15G得る。"
         },
         {
-          floor: 13,
-          tier: "上層：星見の螺旋",
-          title: "第13階：三つの禁止則",
-          text: "6本の鍵の中から、すべての禁止則をすり抜ける1本を探し出してください。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "朝霧の鍵", sub: "銀・丸頭", icon: "🔑" },
-            { id: "k2", pos: "左から2", name: "昼光の鍵", sub: "金・角頭", icon: "🗝️" },
-            { id: "k3", pos: "左から3", name: "黄昏の鍵", sub: "銀・角頭", icon: "🔑" },
-            { id: "k4", pos: "左から4", name: "宵闇の鍵", sub: "銅・丸頭", icon: "🗝️" },
-            { id: "k5", pos: "左から5", name: "深夜の鍵", sub: "銀・丸頭", icon: "🔑" },
-            { id: "k6", pos: "左から6", name: "黎明の鍵", sub: "金・丸頭", icon: "🗝️" }
-          ],
-          clues: [
-            "「金」または「銅」でできた鍵はすべて偽物である。",
-            "「丸頭」の鍵はすべて偽物である。"
-          ],
-          answerId: "k3",
-          trapText: "鍵穴が赤熱し、火花の罠が襲いかかった！",
-          hint: "材質が「銀」のものだけに絞ると1・3・5番目。そこから「丸頭」を除きます。",
-          explanation: "銀製（1・3・5番目）のうち、丸頭ではない角頭の「黄昏の鍵（左から3）」のみが条件を満たします。"
+          id: "sage_quill",
+          icon: "🪶",
+          name: "賢者の羽ペン",
+          desc: "毎層の開始時、最初の条件文1つが最初から「確認済み」になる。"
         },
         {
-          floor: 14,
-          tier: "上層：星見の螺旋",
-          title: "第14階：両隣への呪い",
-          text: "6本の鍵のうち2本に呪いがかかっており、呪われた鍵の「すぐ隣」の鍵もすべて使えなくなっています。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "月桂の鍵", sub: "緑の葉", icon: "🌿" },
-            { id: "k2", pos: "左から2", name: "薔薇の鍵", sub: "紅の棘", icon: "🌹" },
-            { id: "k3", pos: "左から3", name: "百合の鍵", sub: "白の花", icon: "⚜️" },
-            { id: "k4", pos: "左から4", name: "薊の鍵", sub: "紫の棘", icon: "🪻" },
-            { id: "k5", pos: "左から5", name: "蓮の鍵", sub: "桃の花", icon: "🪷" },
-            { id: "k6", pos: "左から6", name: "蔦の鍵", sub: "深緑の葉", icon: "🍃" }
-          ],
-          clues: [
-            "「棘（とげ）」を持つ2本の鍵には呪いがかかっている。",
-            "呪われた鍵自身と、そのすぐ左右に隣接する鍵はすべて偽物である。"
-          ],
-          answerId: "k6",
-          trapText: "見えない棘が飛び出し、指先を貫いた！",
-          hint: "棘を持つのは2番目（薔薇）と4番目（薊）です。その隣（1・3・5番目）もすべて使えなくなります。",
-          explanation: "2番目と4番目が呪われており、その隣接位置である1・3・5番目も除外されるため、残る6番目の「蔦の鍵」が正解です。"
-        },
-        {
-          floor: 15,
-          tier: "第3休憩所：天空の温室",
-          title: "第15階：天空の温室の鍵",
-          text: "最後の休憩所・天空の温室です。6本の鍵から本物を見抜いて先へ進みましょう。",
-          healType: "full",
-          keys: [
-            { id: "k1", pos: "左から1", name: "琥珀蜂の鍵", sub: "六角形", icon: "🐝" },
-            { id: "k2", pos: "左から2", name: "瑠璃蝶の鍵", sub: "菱形", icon: "🦋" },
-            { id: "k3", pos: "左から3", name: "翡翠蝉の鍵", sub: "楕円形", icon: "🪲" },
-            { id: "k4", pos: "左から4", name: "紅蓮蜻蛉の鍵", sub: "菱形", icon: "🪰" },
-            { id: "k5", pos: "左から5", name: "白銀蜘蛛の鍵", sub: "六角形", icon: "🕷️" },
-            { id: "k6", pos: "左から6", name: "黄金蛍の鍵", sub: "楕円形", icon: "✨" }
-          ],
-          clues: [
-            "「六角形」と「楕円形」の鍵はすべて偽物である。",
-            "本物の鍵は、「翡翠蝉の鍵（左から3）」よりも左側に位置する。"
-          ],
-          answerId: "k2",
-          trapText: "温室の蔦が絡みつき、強く締め上げられた！",
-          hint: "形が「菱形」なのは2番目と4番目だけ。そのうち3番目より左側にあるのは1本です。",
-          explanation: "菱形の2番目・4番目のうち、左から3より左にある2番目の「瑠璃蝶の鍵」が正解です。"
-        },
-
-        // --- 16〜20階：最上層 ---
-        {
-          floor: 16,
-          tier: "最上層：時計仕掛けの聖域",
-          title: "第16階：七曜の鍵盤",
-          text: "いよいよ最上層です。鍵は7本に増え、複数の条件を整理しなければ正解に辿り着けません。",
-          keys: [
-            { id: "k1", pos: "1番目", name: "日曜の鍵", sub: "金・太陽", icon: "☀️" },
-            { id: "k2", pos: "2番目", name: "月曜の鍵", sub: "銀・三日月", icon: "🌙" },
-            { id: "k3", pos: "3番目", name: "火曜の鍵", sub: "鉄・剣", icon: "🔥" },
-            { id: "k4", pos: "4番目", name: "水曜の鍵", sub: "水銀・杖", icon: "💧" },
-            { id: "k5", pos: "5番目", name: "木曜の鍵", sub: "錫・雷", icon: "⚡" },
-            { id: "k6", pos: "6番目", name: "金曜の鍵", sub: "銅・鏡", icon: "🪞" },
-            { id: "k7", pos: "7番目", name: "土曜の鍵", sub: "鉛・鎌", icon: "🪐" }
-          ],
-          clues: [
-            "両端（1番目・7番目）およびど真ん中（4番目）の鍵は偽物である。",
-            "「火曜の鍵」より左側にある鍵はすべて偽物である。",
-            "「錫（すず）」と「銅」の鍵は扉を開けない。"
-          ],
-          answerId: "k3",
-          trapText: "七つの鐘が同時に鳴り響き、鼓膜を打つ衝撃が走った！",
-          hint: "「火曜（3番目）より左が偽物」なので1・2番目は消えます。さらに4・5・6・7番目も条件1と3で消えます。",
-          explanation: "1・2番目（火曜より左）、4・7番目（条件1）、5・6番目（錫と銅）がすべて除外され、3番目の「火曜の鍵」だけが残ります。"
-        },
-        {
-          floor: 17,
-          tier: "最上層：時計仕掛けの聖域",
-          title: "第17階：偽りの連鎖",
-          text: "7本の鍵にはそれぞれ隣の鍵に関する法則が適用されています。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "白の鍵", sub: "無地", icon: "⬜" },
-            { id: "k2", pos: "左から2", name: "灰の鍵", sub: "縞模様", icon: "🩶" },
-            { id: "k3", pos: "左から3", name: "黒の鍵", sub: "無地", icon: "⬛" },
-            { id: "k4", pos: "左から4", name: "赤の鍵", sub: "格子柄", icon: "🟥" },
-            { id: "k5", pos: "左から5", name: "青の鍵", sub: "縞模様", icon: "🟦" },
-            { id: "k6", pos: "左から6", name: "緑の鍵", sub: "格子柄", icon: "🟩" },
-            { id: "k7", pos: "左から7", name: "紫の鍵", sub: "無地", icon: "🟪" }
-          ],
-          clues: [
-            "「無地」の鍵はすべて偽物である。",
-            "本物の鍵は、「格子柄」ではない。",
-            "本物の鍵は、ど真ん中（左から4）よりも右側に位置する。"
-          ],
-          answerId: "k5",
-          trapText: "床の紋様が反転し、重力の罠に叩きつけられた！",
-          hint: "無地でも格子柄でもない模様は「縞模様」（2番目と5番目）だけです。",
-          explanation: "無地（1・3・7）と格子柄（4・6）を除くと縞模様の2・5番目が残り、中央より右にある5番目の「青の鍵」が正解です。"
-        },
-        {
-          floor: 18,
-          tier: "最上層：時計仕掛けの聖域",
-          title: "第18階：時計職人の暗号",
-          text: "7本の鍵の柄にはそれぞれ「数字の合計」に関する暗号が刻まれています。",
-          keys: [
-            { id: "k1", pos: "1番", name: "鍵 A", sub: "刻印 [ 14 ]", icon: "🔑" },
-            { id: "k2", pos: "2番", name: "鍵 B", sub: "刻印 [ 23 ]", icon: "🗝️" },
-            { id: "k3", pos: "3番", name: "鍵 C", sub: "刻印 [ 35 ]", icon: "🔑" },
-            { id: "k4", pos: "4番", name: "鍵 D", sub: "刻印 [ 41 ]", icon: "🗝️" },
-            { id: "k5", pos: "5番", name: "鍵 E", sub: "刻印 [ 52 ]", icon: "🔑" },
-            { id: "k6", pos: "6番", name: "鍵 F", sub: "刻印 [ 63 ]", icon: "🗝️" },
-            { id: "k7", pos: "7番", name: "鍵 G", sub: "刻印 [ 70 ]", icon: "🔑" }
-          ],
-          clues: [
-            "刻印の2桁の数字を足した数が「5」になる鍵はすべて偽物である。",
-            "刻印の2桁の数字を足した数が「奇数」になる鍵もすべて偽物である。",
-            "条件をすべて満たす本物の鍵は1本だけ存在する。"
-          ],
-          answerId: "k3",
-          trapText: "暗号盤が火花を散らし、鋭い刃が台座を掠めた！",
-          hint: "それぞれの2桁を足してみましょう（例：1+4=5、2+3=5、3+5=8……）。「5以外」かつ「偶数」になるものを探します。",
-          explanation: "各桁の和は順に 5, 5, 8, 5, 7, 9, 7 です。5でも奇数でもない「8（3+5）」を持つ3番の「鍵 C」が唯一の正解です。"
-        },
-        {
-          floor: 19,
-          tier: "最上層：時計仕掛けの聖域",
-          title: "第19階：大時計の最終関門",
-          text: "最上階のひとつ手前。7本の鍵のうち6本が精巧な罠です。すべての条件を照合してください。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "時針の鍵", sub: "金・大・重", icon: "🕐" },
-            { id: "k2", pos: "左から2", name: "分針の鍵", sub: "銀・中・軽", icon: "🕑" },
-            { id: "k3", pos: "左から3", name: "秒針の鍵", sub: "銅・小・軽", icon: "🕒" },
-            { id: "k4", pos: "左から4", name: "振子の鍵", sub: "鉄・大・重", icon: "🕓" },
-            { id: "k5", pos: "左から5", name: "ゼンマイの鍵", sub: "銀・小・重", icon: "🕔" },
-            { id: "k6", pos: "左から6", name: "鐘楼の鍵", sub: "金・中・軽", icon: "🕕" },
-            { id: "k7", pos: "左から7", name: "文字盤の鍵", sub: "銀・中・重", icon: "🕖" }
-          ],
-          clues: [
-            "「銀」でできていない鍵はすべて偽物である。",
-            "「軽い」鍵はすべて偽物である。",
-            "「大きい」または「小さい」鍵は偽物である（中サイズのみが本物）。"
-          ],
-          answerId: "k7",
-          trapText: "巨大な振り子が落下し、石床が砕け散った！",
-          hint: "「銀」に絞ると2・5・7番目。そこから「軽い（2番目）」と「小さい（5番目）」を除きます。",
-          explanation: "銀製（2・5・7）のうち、重くて中サイズである7番目の「文字盤の鍵」のみがすべての条件に合致します。"
-        },
-        {
-          floor: 20,
-          tier: "最上階：天頂の間の扉",
-          title: "第20階：封魔の天頂扉",
-          text: "ついに最上階（20階）へ到達しました。7本の最後の鍵から、時計塔の封印を解く唯一の1本を選び抜いてください。",
-          keys: [
-            { id: "k1", pos: "左から1", name: "始まりの鍵", sub: "札「私は偽物だ」", icon: "🌅" },
-            { id: "k2", pos: "左から2", name: "記憶の鍵", sub: "札「左から4が本物だ」", icon: "📜" },
-            { id: "k3", pos: "左から3", name: "均衡の鍵", sub: "札「両端のどちらかが本物」", icon: "⚖️" },
-            { id: "k4", pos: "左から4", name: "真実の鍵", sub: "札「左から6は偽物だ」", icon: "💎" },
-            { id: "k5", pos: "左から5", name: "宿命の鍵", sub: "札「左から7が本物だ」", icon: "🔮" },
-            { id: "k6", pos: "左から6", name: "終焉の鍵", sub: "札「左から2と3はどちらも嘘」", icon: "🌑" },
-            { id: "k7", pos: "左から7", name: "輪廻の鍵", sub: "札「左から1が本物だ」", icon: "♾️" }
-          ],
-          clues: [
-            "7本の鍵のうち、本物は1本だけである。",
-            "「本物の鍵の札だけが真実」を述べており、残り6本の偽物の札は「すべて嘘」をついている。",
-            "7つの発言すべてに矛盾が生じない唯一の鍵を選び出せ。"
-          ],
-          answerId: "k6",
-          trapText: "天頂の封印が暴走し、激しい魔力の奔流が押し寄せた！",
-          hint: "各鍵が「本物（＝唯一の真実）」だと1つずつ仮定してみてください。他の札まで真実になってしまったら矛盾です。",
-          explanation: "6番目（終焉の鍵）が本物なら、6の札「2と3は嘘」は真実。他の札は 1(矛盾で嘘)、2(4が本物→嘘)、3(両端が本物→嘘)、4(6は偽物→嘘)、5(7が本物→嘘)、7(1が本物→嘘) となり、完璧に1つだけ真実が成立します！"
+          id: "crimson_idol",
+          icon: "🗿",
+          name: "修羅の偶像",
+          desc: "ミス時のダメージが+1される代わり、報酬の遺物選択肢が常に+1増える。",
+          cursed: true
         }
       ];
 
-      const state = {
-        floorIdx: 0,
-        hp: MAX_HP,
+      // --- メタプログレッション（永続強化） ---
+      const META_UPGRADES = [
+        {
+          id: "maxHpUp",
+          name: "頑強なる心臓",
+          desc: "探索開始時の最大HPが +1 される（最大+2）",
+          maxLevel: 2,
+          baseCost: 40
+        },
+        {
+          id: "startGold",
+          name: "王家の支度金",
+          desc: "探索開始時の所持ゴールドが +30G される（最大+90G）",
+          maxLevel: 3,
+          baseCost: 30
+        },
+        {
+          id: "startMonocle",
+          name: "予備の単眼鏡",
+          desc: "探索開始時の「真実の単眼鏡」所持数が +1 される（最大+2）",
+          maxLevel: 2,
+          baseCost: 35
+        },
+        {
+          id: "startRelic",
+          name: "継承された遺物",
+          desc: "探索開始時にランダムなパッシブ遺物を1つ所持して出発する",
+          maxLevel: 1,
+          baseCost: 70
+        }
+      ];
+
+      function loadMeta() {
+        try {
+          const raw = localStorage.getItem(META_KEY);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            return {
+              gears: parsed.gears || 0,
+              abyssUnlocked: Boolean(parsed.abyssUnlocked),
+              abyssCleared: Boolean(parsed.abyssCleared),
+              upgrades: Object.assign(
+                { maxHpUp: 0, startGold: 0, startMonocle: 0, startRelic: 0 },
+                parsed.upgrades || {}
+              )
+            };
+          }
+        } catch {}
+        return {
+          gears: 0,
+          abyssUnlocked: false,
+          abyssCleared: false,
+          upgrades: { maxHpUp: 0, startGold: 0, startMonocle: 0, startRelic: 0 }
+        };
+      }
+
+      function saveMeta(meta) {
+        try {
+          localStorage.setItem(META_KEY, JSON.stringify(meta));
+        } catch {}
+      }
+
+      let metaState = loadMeta();
+
+      // --- プロシージャル（自動生成）パズルエンジン ---
+      const THEMES = [
+        {
+          names: ["太陽の鍵", "三日月の鍵", "明星の鍵", "彗星の鍵", "日蝕の鍵", "極光の鍵", "天球の鍵", "白夜の鍵", "黄昏の鍵"],
+          icons: ["☀️", "🌙", "⭐", "☄️", "🌑", "🌌", "🪐", "🌅", "🌆"],
+          materials: ["黄金", "白銀", "青銅", "黒鉄"],
+          shapes: ["丸頭", "角頭", "菱頭"]
+        },
+        {
+          names: ["紅蓮の鍵", "蒼氷の鍵", "翠風の鍵", "琥珀の鍵", "紫電の鍵", "白光の鍵", "漆黒の鍵", "桜花の鍵", "深海の鍵"],
+          icons: ["🔥", "❄️", "🍃", "⚡", "🔮", "✨", "🖤", "🌸", "🌊"],
+          materials: ["紅玉", "蒼玉", "翠玉", "真珠"],
+          shapes: ["長柄", "短柄", "螺旋柄"]
+        },
+        {
+          names: ["獅子の鍵", "大鷲の鍵", "大蛇の鍵", "白鹿の鍵", "黒狼の鍵", "梟の鍵", "竜の鍵", "一角獣の鍵", "鳳凰の鍵"],
+          icons: ["🦁", "🦅", "🐍", "🦌", "🐺", "🦉", "🐉", "🦄", "🐦‍🔥"],
+          materials: ["真鍮", "白銀", "黒檀", "象牙"],
+          shapes: ["重厚", "軽量", "精密"]
+        }
+      ];
+
+      function shuffle(arr) {
+        const a = [...arr];
+        for (let i = a.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [a[i], a[j]] = [a[j], a[i]];
+        }
+        return a;
+      }
+
+      function getKeyCountForFloor(floorNum, isAbyss) {
+        if (!isAbyss) {
+          if (floorNum <= 4) return 4;
+          if (floorNum <= 9) return 5;
+          if (floorNum <= 14) return 6;
+          return 7;
+        } else {
+          if (floorNum <= 3) return 5;
+          if (floorNum <= 7) return 6;
+          if (floorNum <= 12) return 7;
+          if (floorNum <= 16) return 8;
+          return 9;
+        }
+      }
+
+      function formatFloorName(floorNum, isAbyss) {
+        return isAbyss ? `逆層 B${floorNum}` : `第${floorNum}層`;
+      }
+
+      function generateFloorPuzzle(floorNum, roomType, modifier, isAbyss) {
+        const keyCount = getKeyCountForFloor(floorNum, isAbyss);
+        const theme = THEMES[(floorNum + Math.floor(Math.random() * THEMES.length)) % THEMES.length];
+        const names = shuffle(theme.names).slice(0, keyCount);
+        const icons = shuffle(theme.icons).slice(0, keyCount);
+
+        const liarFloors = isAbyss ? [5, 10, 15, 20] : [7, 13, 20];
+        if (liarFloors.includes(floorNum)) {
+          return isAbyss
+            ? generateAbyssLiarPuzzle(floorNum, keyCount, names, icons)
+            : generateLiarPuzzle(floorNum, keyCount, names, icons);
+        }
+
+        for (let attempt = 0; attempt < 50; attempt++) {
+          const keys = [];
+          for (let i = 0; i < keyCount; i++) {
+            const mat = theme.materials[Math.floor(Math.random() * theme.materials.length)];
+            const shp = theme.shapes[Math.floor(Math.random() * theme.shapes.length)];
+            keys.push({
+              id: `k${i + 1}`,
+              index: i,
+              pos: `左から${i + 1}`,
+              name: names[i],
+              material: mat,
+              shape: shp,
+              sub: `${mat}・${shp}`,
+              icon: icons[i]
+            });
+          }
+
+          const answerIdx = Math.floor(Math.random() * keyCount);
+          const ansKey = keys[answerIdx];
+          const candidateRules = [];
+
+          theme.materials.forEach((m) => {
+            if (m !== ansKey.material && keys.some((k) => k.material === m)) {
+              candidateRules.push({
+                text: `「${m}」でできた鍵はすべて偽物である。`,
+                filter: (k) => k.material !== m
+              });
+            }
+          });
+
+          theme.shapes.forEach((s) => {
+            if (s !== ansKey.shape && keys.some((k) => k.shape === s)) {
+              candidateRules.push({
+                text: `「${s}」の鍵はすべて扉を開けることができない。`,
+                filter: (k) => k.shape !== s
+              });
+            }
+          });
+
+          if (answerIdx > 0) {
+            const refIdx = Math.floor(Math.random() * answerIdx);
+            candidateRules.push({
+              text: `本物の鍵は、「${keys[refIdx].name}（${keys[refIdx].pos}）」よりも右側に置かれている。`,
+              filter: (k) => k.index > refIdx
+            });
+          }
+          if (answerIdx < keyCount - 1) {
+            const refIdx = answerIdx + 1 + Math.floor(Math.random() * (keyCount - 1 - answerIdx));
+            candidateRules.push({
+              text: `本物の鍵は、「${keys[refIdx].name}（${keys[refIdx].pos}）」よりも左側に置かれている。`,
+              filter: (k) => k.index < refIdx
+            });
+          }
+
+          if (answerIdx !== 0 && answerIdx !== keyCount - 1) {
+            candidateRules.push({
+              text: `本物の鍵は、両端（左から1・左から${keyCount}）には置かれていない。`,
+              filter: (k) => k.index !== 0 && k.index !== keyCount - 1
+            });
+          }
+
+          const ansIsEven = (answerIdx + 1) % 2 === 0;
+          candidateRules.push({
+            text: ansIsEven
+              ? `奇数番目（1・3・5…）にある鍵はすべて罠である。`
+              : `偶数番目（2・4・6…）にある鍵はすべて罠である。`,
+            filter: (k) => ((k.index + 1) % 2 === 0) === ansIsEven
+          });
+
+          const trapCandidates = keys.filter((k) => Math.abs(k.index - answerIdx) > 1);
+          if (trapCandidates.length > 0) {
+            const cursedTrap = trapCandidates[Math.floor(Math.random() * trapCandidates.length)];
+            candidateRules.push({
+              text: `「${cursedTrap.name}」は呪われており、その鍵自身とすぐ左右に隣接する鍵はすべて偽物である。`,
+              filter: (k) => Math.abs(k.index - cursedTrap.index) > 1
+            });
+          }
+
+          if (isAbyss && keyCount >= 6) {
+            const mid = Math.floor(keyCount / 2);
+            if (answerIdx !== mid) {
+              candidateRules.push({
+                text: `ど真ん中（左から${mid + 1}）の鍵は精巧な偽物である。`,
+                filter: (k) => k.index !== mid
+              });
+            }
+          }
+
+          const chosenRules = [];
+          let remaining = [...keys];
+          const shuffledRules = shuffle(candidateRules);
+
+          for (const rule of shuffledRules) {
+            if (remaining.length <= 1) break;
+            const nextRem = remaining.filter(rule.filter);
+            if (nextRem.length < remaining.length && nextRem.some((k) => k.id === ansKey.id)) {
+              chosenRules.push(rule);
+              remaining = nextRem;
+            }
+          }
+
+          if (remaining.length === 1 && remaining[0].id === ansKey.id && chosenRules.length >= 2) {
+            const clues = chosenRules.map((r, idx) => {
+              if (roomType === "cursed" && idx === chosenRules.length - 1) {
+                return r.text.replace(/「.*?」/, "「？？？（呪いの霧で判読不能）」");
+              }
+              return r.text;
+            });
+
+            if (modifier && modifier.id === "fog") {
+              const hideIdx = (answerIdx + 1) % keyCount;
+              keys[hideIdx].sub = "？？？・？？？";
+            }
+
+            const fLabel = formatFloorName(floorNum, isAbyss);
+            return {
+              floor: floorNum,
+              title: `${fLabel}：${roomType === "cursed" ? "呪われし封印扉" : isAbyss ? "逆転の刻印台座" : "黒鍵の台座"}`,
+              text: `台座に${keyCount}本の鍵が並んでいます。刻まれた論理の条件から本物の1本を導き出してください。`,
+              keys,
+              clues,
+              answerId: ansKey.id,
+              hint: `本物の鍵は「${ansKey.material}・${ansKey.shape}」の特徴を持ち、${ansKey.pos}付近にあります。`,
+              explanation: `すべての条件を満たすのは${ansKey.pos}の「${ansKey.name}（${ansKey.material}・${ansKey.shape}）」のみです。`
+            };
+          }
+        }
+
+        return isAbyss
+          ? generateAbyssLiarPuzzle(floorNum, keyCount, names, icons)
+          : generateLiarPuzzle(floorNum, keyCount, names, icons);
+      }
+
+      function generateLiarPuzzle(floorNum, keyCount, names, icons) {
+        const answerIdx = Math.floor(Math.random() * keyCount);
+        const otherIdx = (answerIdx + 1) % keyCount;
+        const thirdIdx = (answerIdx + 2) % keyCount;
+
+        const keys = [];
+        for (let i = 0; i < keyCount; i++) {
+          let statement = "";
+          if (i === answerIdx) {
+            statement = `札「左から${otherIdx + 1}は偽物だ」`;
+          } else if (i === otherIdx) {
+            statement = `札「私が本物の鍵だ」`;
+          } else if (i === thirdIdx) {
+            statement = `札「左から${answerIdx + 1}は偽物だ」`;
+          } else {
+            statement = `札「左から${otherIdx + 1}が本物だ」`;
+          }
+
+          keys.push({
+            id: `k${i + 1}`,
+            index: i,
+            pos: `左から${i + 1}`,
+            name: names[i],
+            sub: statement,
+            icon: icons[i]
+          });
+        }
+
+        return {
+          floor: floorNum,
+          title: `第${floorNum}層：真実と虚偽の審問`,
+          text: `${keyCount}本の鍵にはそれぞれ主張が刻まれています。矛盾のない唯一の鍵を見抜いてください。`,
+          keys,
+          clues: [
+            `${keyCount}本の鍵のうち、本物は1本だけである。`,
+            `「本物の鍵の札だけが真実」を述べており、残り${keyCount - 1}本の偽物の札は「すべて嘘」をついている。`
+          ],
+          answerId: keys[answerIdx].id,
+          hint: `「本物の札だけが真実・偽物はすべて嘘」という前提で、各鍵を1本ずつ本物と仮定して矛盾を探しましょう。`,
+          explanation: `左から${answerIdx + 1}の「${keys[answerIdx].name}」を本物とすると、その札だけが真実となり、他のすべての札が嘘になるため完全に矛盾なく成立します。`
+        };
+      }
+
+      function generateAbyssLiarPuzzle(floorNum, keyCount, names, icons) {
+        const answerIdx = Math.floor(Math.random() * keyCount);
+        const decoyA = (answerIdx + 1) % keyCount;
+        const decoyB = (answerIdx + 2) % keyCount;
+        const decoyC = (answerIdx + 3) % keyCount;
+
+        const keys = [];
+        for (let i = 0; i < keyCount; i++) {
+          let statement = "";
+          if (i === answerIdx) {
+            statement = `札「左から${decoyA + 1}と${decoyB + 1}はどちらも嘘だ」`;
+          } else if (i === decoyA) {
+            statement = `札「左から${decoyC + 1}が本物だ」`;
+          } else if (i === decoyB) {
+            statement = `札「私が本物の鍵だ」`;
+          } else if (i === decoyC) {
+            statement = `札「左から${answerIdx + 1}は偽物だ」`;
+          } else {
+            if (answerIdx === 0 || answerIdx === keyCount - 1) {
+              statement = `札「左から${decoyB + 1}が本物だ」`;
+            } else {
+              statement = `札「両端（1か${keyCount}）が本物だ」`;
+            }
+          }
+
+          keys.push({
+            id: `k${i + 1}`,
+            index: i,
+            pos: `左から${i + 1}`,
+            name: names[i],
+            sub: statement,
+            icon: icons[i]
+          });
+        }
+
+        return {
+          floor: floorNum,
+          title: `逆層 B${floorNum}：逆さまの魔導審問`,
+          text: `逆さまのバベルの鍵は巧妙な嘘をつきます。${keyCount}の証言すべてに矛盾が生じない唯一の1本を見極めてください。`,
+          keys,
+          clues: [
+            `${keyCount}本の鍵のうち、本物は1本だけである。`,
+            `「本物の鍵の札だけが真実」を述べており、偽物の札は「すべて嘘」をついている。`,
+            `仮に他の鍵を本物と仮定すると、別の札まで真実になってしまい矛盾が生じる。`
+          ],
+          answerId: keys[answerIdx].id,
+          hint: `「左から${answerIdx + 1}は偽物だ」と断言している札（左から${decoyC + 1}）に注目してください。もしそれが嘘なら……？`,
+          explanation: `左から${answerIdx + 1}の「${keys[answerIdx].name}」を本物とすると、その札の「${decoyA + 1}と${decoyB + 1}はどちらも嘘」は真実となり、残る${keyCount - 1}本の札すべてが矛盾なく嘘になります。`
+        };
+      }
+
+      // --- 環境モディファイア ---
+      const MODIFIERS = [
+        { id: "thunder", type: "blessing", icon: "⚡", text: "【祝福：雷鳴の鼓動】この層を一発開錠すると獲得ゴールドが2倍！" },
+        { id: "fog", type: "curse", icon: "🌑", text: "【呪い：暗闇の霧】鍵1本の材質・形状の表記が霧に覆われている。" },
+        { id: "blood", type: "curse", icon: "🩸", text: "【呪い：血の契約】罠ダメージが +1 されるが、突破時に遺物宝箱が出現！" },
+        { id: "silence", type: "curse", icon: "🔇", text: "【呪い：封じられた助言】この層では「手がかりの助言」ボタンが使えない。" }
+      ];
+
+      // --- ゲーム状態 ---
+      const runState = {
+        isAbyss: false,
+        floor: 1,
+        roomType: "normal",
+        modifier: null,
+        hp: 3,
+        maxHp: 3,
+        gold: 0,
+        combo: 0,
+        perfectCount: 0,
+        passives: [],
+        consumables: { monocle: 1, elixir: 1 },
+        currentPuzzle: null,
         selectedKeyId: null,
         eliminatedIds: new Set(),
-        clearedFloors: new Set(),
-        isFloorCleared: false,
-        isGameOver: false,
-        healedFloors: new Set()
+        checkedClues: new Set(),
+        floorMistakes: 0,
+        floorUsedHint: false,
+        chronoUsedThisFloor: false,
+        isCleared: false,
+        isGameOver: false
       };
 
       const el = {
         mainFrame: document.getElementById("mainFrame"),
+        openWorkshopBtn: document.getElementById("openWorkshopBtn"),
+        modeSwitchBtn: document.getElementById("modeSwitchBtn"),
+        newRunTopBtn: document.getElementById("newRunTopBtn"),
+        soundToggleBtn: document.getElementById("soundToggleBtn"),
+        subtitleBadge: document.getElementById("subtitleBadge"),
+        mainTitle: document.getElementById("mainTitle"),
         floorBadge: document.getElementById("floorBadge"),
-        tierLabel: document.getElementById("tierLabel"),
+        roomTypeTag: document.getElementById("roomTypeTag"),
+        goldPill: document.getElementById("goldPill"),
         heartsDisplay: document.getElementById("heartsDisplay"),
-        progressTrack: document.getElementById("progressTrack"),
-        sanctuaryBanner: document.getElementById("sanctuaryBanner"),
+        passiveList: document.getElementById("passiveList"),
+        useMonocleBtn: document.getElementById("useMonocleBtn"),
+        useElixirBtn: document.getElementById("useElixirBtn"),
+        cntMonocle: document.getElementById("cntMonocle"),
+        cntElixir: document.getElementById("cntElixir"),
+        modifierBanner: document.getElementById("modifierBanner"),
         problemTitle: document.getElementById("problemTitle"),
-        keyCountPill: document.getElementById("keyCountPill"),
+        comboText: document.getElementById("comboText"),
         problemText: document.getElementById("problemText"),
         cluesList: document.getElementById("cluesList"),
         keysGrid: document.getElementById("keysGrid"),
@@ -1343,14 +1479,22 @@
         unlockBtn: document.getElementById("unlockBtn"),
         hintBtn: document.getElementById("hintBtn"),
         clearMemoBtn: document.getElementById("clearMemoBtn"),
-        nextBtn: document.getElementById("nextBtn"),
+        nextRouteBtn: document.getElementById("nextRouteBtn"),
+        challengeAbyssBtn: document.getElementById("challengeAbyssBtn"),
         restartBtn: document.getElementById("restartBtn"),
-        floorGrid: document.getElementById("floorGrid")
+        choiceModal: document.getElementById("choiceModal"),
+        choiceModalTitle: document.getElementById("choiceModalTitle"),
+        choiceModalSub: document.getElementById("choiceModalSub"),
+        choiceGrid: document.getElementById("choiceGrid"),
+        skipChoiceBtn: document.getElementById("skipChoiceBtn"),
+        workshopModal: document.getElementById("workshopModal"),
+        workshopGearText: document.getElementById("workshopGearText"),
+        upgradeList: document.getElementById("upgradeList"),
+        closeWorkshopBtn: document.getElementById("closeWorkshopBtn")
       };
 
-      function getCurrentFloor() {
-        const safeIdx = Math.max(0, Math.min(state.floorIdx, FLOORS.length - 1));
-        return FLOORS[safeIdx];
+      function hasPassive(id) {
+        return runState.passives.some((r) => r.id === id);
       }
 
       function showMessage(type, text) {
@@ -1363,207 +1507,255 @@
         el.feedbackBanner.textContent = "";
       }
 
-      function triggerTrapEffect() {
+      function triggerShake() {
         el.mainFrame.classList.remove("shake");
         void el.mainFrame.offsetWidth;
         el.mainFrame.classList.add("shake");
       }
 
-      function applyFloorSanctuary(floorObj) {
-        el.sanctuaryBanner.className = "sanctuary-banner";
-        el.sanctuaryBanner.textContent = "";
-
-        if (!floorObj.healType) return;
-
-        const alreadyHealed = state.healedFloors.has(floorObj.floor);
-        if (floorObj.healType === "partial") {
-          if (!alreadyHealed) {
-            const before = state.hp;
-            state.hp = Math.min(MAX_HP, state.hp + 1);
-            state.healedFloors.add(floorObj.floor);
-            const diff = state.hp - before;
-            el.sanctuaryBanner.textContent =
-              diff > 0
-                ? "✨ 回復スポット（5階 小聖堂）：清らかな泉により体力が 1 回復しました！"
-                : "✨ 回復スポット（5階 小聖堂）：体力はすでに満タン（♥♥♥）です。";
-          } else {
-            el.sanctuaryBanner.textContent = "✨ 5階 小聖堂（体力1回復スポット）";
-          }
-          el.sanctuaryBanner.classList.add("show");
-        } else if (floorObj.healType === "full") {
-          if (!alreadyHealed) {
-            const before = state.hp;
-            state.hp = MAX_HP;
-            state.healedFloors.add(floorObj.floor);
-            el.sanctuaryBanner.textContent =
-              before < MAX_HP
-                ? `✨ 回復スポット（${floorObj.floor}階 聖域）：神秘の鐘の音により体力が全回復しました！`
-                : `✨ 回復スポット（${floorObj.floor}階 聖域）：体力はすでに満タン（♥♥♥）です。`;
-          } else {
-            el.sanctuaryBanner.textContent = `✨ ${floorObj.floor}階 聖域（体力全回復スポット）`;
-          }
-          el.sanctuaryBanner.classList.add("show");
+      function startNewRun(abyssFlag = runState.isAbyss) {
+        metaState = loadMeta();
+        if (abyssFlag && !metaState.abyssUnlocked) {
+          abyssFlag = false;
         }
+        runState.isAbyss = abyssFlag;
+
+        if (runState.isAbyss) {
+          document.body.classList.add("abyss-theme");
+          el.subtitleBadge.textContent = "INVERTED BABEL ― HIGH DIFFICULTY";
+          el.mainTitle.textContent = "逆さまのバベル";
+        } else {
+          document.body.classList.remove("abyss-theme");
+          el.subtitleBadge.textContent = "BABEL OF BLACK KEYS";
+          el.mainTitle.textContent = "黒鍵のバベル";
+        }
+
+        const up = metaState.upgrades;
+        runState.floor = 1;
+        runState.roomType = "normal";
+        const baseHp = runState.isAbyss ? 2 : 3;
+        runState.maxHp = baseHp + (up.maxHpUp || 0);
+        runState.hp = runState.maxHp;
+        runState.gold = (up.startGold || 0) * 30;
+        runState.combo = 0;
+        runState.perfectCount = 0;
+        runState.passives = [];
+        runState.consumables = {
+          monocle: 1 + (up.startMonocle || 0),
+          elixir: 1
+        };
+
+        if (up.startRelic > 0) {
+          const starter = RELIC_POOL[Math.floor(Math.random() * (RELIC_POOL.length - 1))];
+          runState.passives.push(starter);
+        }
+
+        el.choiceModal.classList.remove("show");
+        setupFloor(1, "normal");
       }
 
-      function loadFloor(index) {
-        if (typeof index !== "number" || index < 0 || index >= FLOORS.length) {
-          index = 0;
-        }
-        state.floorIdx = index;
-        state.selectedKeyId = null;
-        state.eliminatedIds.clear();
-        state.isFloorCleared = false;
-        state.isGameOver = false;
+      function setupFloor(floorNum, roomType) {
+        runState.floor = floorNum;
+        runState.roomType = roomType;
+        runState.selectedKeyId = null;
+        runState.eliminatedIds.clear();
+        runState.checkedClues.clear();
+        runState.floorMistakes = 0;
+        runState.floorUsedHint = false;
+        runState.chronoUsedThisFloor = false;
+        runState.isCleared = false;
+        runState.isGameOver = false;
 
-        const floorObj = getCurrentFloor();
-        applyFloorSanctuary(floorObj);
+        if (roomType === "sanctuary") {
+          runState.hp = Math.min(runState.maxHp, runState.hp + 1);
+        }
+
+        const modChance = runState.isAbyss ? 1.0 : 0.45;
+        if (floorNum >= 3 && Math.random() < modChance) {
+          const pool = runState.isAbyss
+            ? MODIFIERS.filter((m) => m.type === "curse")
+            : MODIFIERS;
+          runState.modifier = pool[Math.floor(Math.random() * pool.length)];
+        } else {
+          runState.modifier = null;
+        }
+
+        const puzzle = generateFloorPuzzle(floorNum, roomType, runState.modifier, runState.isAbyss);
+        runState.currentPuzzle = puzzle;
+
+        if (hasPassive("compass")) {
+          const fakes = puzzle.keys.filter((k) => k.id !== puzzle.answerId);
+          if (fakes.length > 0) {
+            const target = fakes[Math.floor(Math.random() * fakes.length)];
+            runState.eliminatedIds.add(target.id);
+          }
+        }
+
+        if (hasPassive("sage_quill") && puzzle.clues.length > 0) {
+          runState.checkedClues.add(0);
+        }
 
         el.unlockBtn.style.display = "inline-block";
         el.unlockBtn.disabled = false;
         el.hintBtn.style.display = "inline-block";
+        el.hintBtn.disabled = Boolean(runState.modifier && runState.modifier.id === "silence");
         el.clearMemoBtn.style.display = "inline-block";
-        el.nextBtn.style.display = "none";
+        el.nextRouteBtn.style.display = "none";
+        el.challengeAbyssBtn.style.display = "none";
         el.restartBtn.style.display = "none";
 
         clearMessage();
+        if (roomType === "sanctuary") {
+          showMessage("relic", "⛪ 静寂の礼拝堂に足を踏み入れた。聖なる祈りにより体力が 1 回復しました！");
+        } else if (roomType === "cursed") {
+          showMessage("relic", "🔮 呪われし宝物庫の扉だ。最後の条件文が呪いで伏せられているが、突破すれば必ず遺物を獲得できる！");
+        } else if (floorNum === 1 && runState.isAbyss) {
+          showMessage("relic", "🔮 高難度【逆さまのバベル】へようこそ。地中深くへ反転した二十の逆層では、最大9本の鍵と逆説証言が待ち受ける！");
+        }
+
         renderAll();
       }
 
-      function resetEntireRun() {
-        state.hp = MAX_HP;
-        state.clearedFloors.clear();
-        state.healedFloors.clear();
-        loadFloor(0);
-      }
+      function renderAll() {
+        el.openWorkshopBtn.textContent = `⚙️ 時計技師の工房（歯車: ${metaState.gears}）`;
 
-      function renderHud() {
-        const floorObj = getCurrentFloor();
-        el.floorBadge.textContent = `第 ${floorObj.floor} 階 / ${FLOORS.length} 階`;
-        el.tierLabel.textContent = floorObj.tier;
-
-        el.heartsDisplay.innerHTML = "";
-        for (let i = 0; i < MAX_HP; i++) {
-          const span = document.createElement("span");
-          if (i < state.hp) {
-            span.className = "heart-full";
-            span.textContent = "♥";
-          } else {
-            span.className = "heart-empty";
-            span.textContent = "♡";
-          }
-          el.heartsDisplay.appendChild(span);
+        if (!metaState.abyssUnlocked) {
+          el.modeSwitchBtn.className = "mode-switch-btn locked-mode";
+          el.modeSwitchBtn.textContent = "🔒 逆さまのバベル（20層制覇で解放）";
+        } else if (runState.isAbyss) {
+          el.modeSwitchBtn.className = "mode-switch-btn abyss-active";
+          el.modeSwitchBtn.textContent = "🔮 逆さまのバベル（クリックで黒鍵のバベルへ）";
+        } else {
+          el.modeSwitchBtn.className = "mode-switch-btn";
+          el.modeSwitchBtn.textContent = "⚔️ 黒鍵のバベル（クリックで逆さまのバベルへ）";
         }
 
-        // 20階プログレスバー描画
-        el.progressTrack.innerHTML = "";
-        FLOORS.forEach((f, idx) => {
-          const pip = document.createElement("div");
-          pip.className = "progress-pip";
-          if (f.healType) pip.classList.add("heal-pip");
-          if (state.clearedFloors.has(f.floor)) pip.classList.add("cleared");
-          if (idx === state.floorIdx) pip.classList.add("current");
-          pip.title = `${f.floor}階${f.healType ? "（回復地点）" : ""}`;
-          el.progressTrack.appendChild(pip);
-        });
-      }
+        el.floorBadge.textContent = runState.isAbyss
+          ? `逆層 B${runState.floor} / B${TOTAL_FLOORS}`
+          : `第 ${runState.floor} 層 / ${TOTAL_FLOORS} 層`;
 
-      function renderProblem() {
-        const floorObj = getCurrentFloor();
-        el.problemTitle.textContent = floorObj.title;
-        el.keyCountPill.textContent = `候補の鍵：全 ${floorObj.keys.length} 本`;
-        el.problemText.textContent = floorObj.text;
+        const roomLabels = {
+          normal: "⚔️ 試練の扉",
+          cursed: "🔮 呪われし宝物庫",
+          sanctuary: "⛪ 静寂の礼拝堂"
+        };
+        el.roomTypeTag.textContent = roomLabels[runState.roomType] || "⚔️ 試練の扉";
+        el.goldPill.textContent = `💰 ${runState.gold} G`;
+
+        el.heartsDisplay.innerHTML = "";
+        for (let i = 0; i < runState.maxHp; i++) {
+          const s = document.createElement("span");
+          s.className = i < runState.hp ? "heart-full" : "heart-empty";
+          s.textContent = i < runState.hp ? "♥" : "♡";
+          el.heartsDisplay.appendChild(s);
+        }
+
+        el.passiveList.innerHTML = `<span class="passive-label">所持遺物：</span>`;
+        if (runState.passives.length === 0) {
+          const empty = document.createElement("span");
+          empty.style.fontSize = "0.75rem";
+          empty.style.color = "var(--ink-muted)";
+          empty.textContent = "なし";
+          el.passiveList.appendChild(empty);
+        } else {
+          runState.passives.forEach((rel) => {
+            const chip = document.createElement("span");
+            chip.className = "relic-chip" + (rel.cursed ? " cursed" : "");
+            chip.title = rel.desc;
+            chip.textContent = `${rel.icon} ${rel.name}`;
+            el.passiveList.appendChild(chip);
+          });
+        }
+
+        el.cntMonocle.textContent = String(runState.consumables.monocle);
+        el.cntElixir.textContent = String(runState.consumables.elixir);
+        const locked = runState.isCleared || runState.isGameOver;
+        el.useMonocleBtn.disabled = locked || runState.consumables.monocle <= 0;
+        el.useElixirBtn.disabled = locked || runState.consumables.elixir <= 0 || runState.hp >= runState.maxHp;
+
+        if (runState.modifier) {
+          el.modifierBanner.className = `modifier-banner show modifier-${runState.modifier.type}`;
+          el.modifierBanner.textContent = `${runState.modifier.icon} ${runState.modifier.text}`;
+        } else {
+          el.modifierBanner.className = "modifier-banner";
+        }
+
+        const p = runState.currentPuzzle;
+        el.problemTitle.textContent = p.title;
+        el.comboText.textContent = `連続一発: ${runState.combo}（累計: ${runState.perfectCount}）`;
+        el.problemText.textContent = p.text;
 
         el.cluesList.innerHTML = "";
-        floorObj.clues.forEach((clue, idx) => {
+        p.clues.forEach((c, idx) => {
           const li = document.createElement("li");
+          if (runState.checkedClues.has(idx)) li.classList.add("checked-clue");
           const seal = document.createElement("span");
           seal.className = "clue-seal";
-          seal.textContent = String(idx + 1);
-          const text = document.createElement("span");
-          text.textContent = clue;
+          seal.textContent = runState.checkedClues.has(idx) ? "✓" : String(idx + 1);
+          const span = document.createElement("span");
+          span.textContent = c;
           li.appendChild(seal);
-          li.appendChild(text);
+          li.appendChild(span);
+          li.addEventListener("click", () => {
+            if (runState.checkedClues.has(idx)) runState.checkedClues.delete(idx);
+            else runState.checkedClues.add(idx);
+            SoundFX.memo();
+            renderAll();
+          });
           el.cluesList.appendChild(li);
         });
-      }
 
-      function renderKeys() {
-        const floorObj = getCurrentFloor();
         el.keysGrid.innerHTML = "";
-
-        floorObj.keys.forEach((keyItem) => {
+        p.keys.forEach((k, idx) => {
           const card = document.createElement("div");
           card.className = "key-card";
-          card.setAttribute("role", "button");
-          card.setAttribute("tabindex", "0");
-
-          const isSelected = state.selectedKeyId === keyItem.id;
-          const isEliminated = state.eliminatedIds.has(keyItem.id);
-
-          if (isSelected) card.classList.add("selected");
-          if (isEliminated) card.classList.add("eliminated");
-          if (state.isFloorCleared || state.isGameOver) card.classList.add("locked-card");
-          if (state.isFloorCleared && keyItem.id === floorObj.answerId) {
+          if (runState.selectedKeyId === k.id) card.classList.add("selected");
+          if (runState.eliminatedIds.has(k.id)) card.classList.add("eliminated");
+          if (locked) card.classList.add("locked-card");
+          if (runState.isCleared && k.id === p.answerId) {
             card.classList.remove("selected");
             card.classList.add("correct-reveal");
           }
 
           const posTag = document.createElement("div");
           posTag.className = "pos-tag";
-          posTag.textContent = keyItem.pos;
+          posTag.innerHTML = `<span>${k.pos}</span><span>[${idx + 1}]</span>`;
 
           const ring = document.createElement("div");
           ring.className = "key-emblem-ring";
-          const icon = document.createElement("div");
-          icon.className = "key-icon";
-          icon.textContent = keyItem.icon;
-          ring.appendChild(icon);
+          ring.innerHTML = `<div class="key-icon">${k.icon}</div>`;
 
           const name = document.createElement("div");
           name.className = "key-name";
-          name.textContent = keyItem.name;
+          name.textContent = k.name;
 
           const sub = document.createElement("div");
           sub.className = "key-sub";
-          sub.textContent = keyItem.sub;
+          sub.textContent = k.sub;
 
           const memoBtn = document.createElement("button");
           memoBtn.type = "button";
           memoBtn.className = "memo-toggle";
-          memoBtn.textContent = isEliminated ? "除外を解除" : "偽物として除外";
-          memoBtn.disabled = state.isFloorCleared || state.isGameOver;
-
+          memoBtn.textContent = runState.eliminatedIds.has(k.id) ? "除外を戻す" : "偽物メモ";
+          memoBtn.disabled = locked;
           memoBtn.addEventListener("click", (e) => {
             e.stopPropagation();
-            if (state.isFloorCleared || state.isGameOver) return;
-            if (state.eliminatedIds.has(keyItem.id)) {
-              state.eliminatedIds.delete(keyItem.id);
-            } else {
-              state.eliminatedIds.add(keyItem.id);
-              if (state.selectedKeyId === keyItem.id) {
-                state.selectedKeyId = null;
-              }
+            if (locked) return;
+            SoundFX.memo();
+            if (runState.eliminatedIds.has(k.id)) runState.eliminatedIds.delete(k.id);
+            else {
+              runState.eliminatedIds.add(k.id);
+              if (runState.selectedKeyId === k.id) runState.selectedKeyId = null;
             }
-            renderKeys();
+            renderAll();
           });
 
-          const handleSelect = () => {
-            if (state.isFloorCleared || state.isGameOver) return;
-            clearMessage();
-            if (state.eliminatedIds.has(keyItem.id)) {
-              state.eliminatedIds.delete(keyItem.id);
-            }
-            state.selectedKeyId = keyItem.id;
-            renderKeys();
-          };
-
-          card.addEventListener("click", handleSelect);
-          card.addEventListener("keydown", (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              handleSelect();
-            }
+          card.addEventListener("click", () => {
+            if (locked) return;
+            SoundFX.select();
+            if (runState.eliminatedIds.has(k.id)) runState.eliminatedIds.delete(k.id);
+            runState.selectedKeyId = k.id;
+            renderAll();
           });
 
           card.appendChild(posTag);
@@ -1575,119 +1767,424 @@
         });
       }
 
-      function renderTowerMap() {
-        el.floorGrid.innerHTML = "";
-        FLOORS.forEach((f, idx) => {
-          const node = document.createElement("div");
-          node.className = "floor-node";
-          if (f.healType) node.classList.add("heal");
-          if (state.clearedFloors.has(f.floor)) node.classList.add("cleared");
-          if (idx === state.floorIdx) node.classList.add("current");
-
-          let label = `${f.floor}F`;
-          if (f.healType === "partial") label += " (+1♥)";
-          if (f.healType === "full") label += " (全回復)";
-          node.textContent = label;
-          el.floorGrid.appendChild(node);
-        });
-      }
-
-      function renderAll() {
-        renderHud();
-        renderProblem();
-        renderKeys();
-        renderTowerMap();
-      }
-
-      function handleUnlockAttempt() {
-        if (state.isFloorCleared || state.isGameOver) return;
-
-        const floorObj = getCurrentFloor();
-
-        if (!state.selectedKeyId) {
-          showMessage("warning", "鍵が選択されていません。扉に差し込む鍵を1本選んでください。");
+      // --- 開錠判定 ---
+      el.unlockBtn.addEventListener("click", () => {
+        if (runState.isCleared || runState.isGameOver) return;
+        const p = runState.currentPuzzle;
+        if (!runState.selectedKeyId) {
+          showMessage("warning", "鍵が選択されていません。台座の鍵を1本選んでください。");
           return;
         }
+        const chosen = p.keys.find((k) => k.id === runState.selectedKeyId);
+        if (!chosen) return;
 
-        const validKey = floorObj.keys.find((k) => k.id === state.selectedKeyId);
-        if (!validKey) {
-          state.selectedKeyId = null;
-          renderKeys();
-          showMessage("warning", "選択状態に不整合が生じました。もう一度鍵を選択してください。");
-          return;
-        }
-
-        if (validKey.id === floorObj.answerId) {
-          state.isFloorCleared = true;
-          state.clearedFloors.add(floorObj.floor);
+        if (chosen.id === p.answerId) {
+          SoundFX.unlock();
+          runState.isCleared = true;
           el.unlockBtn.disabled = true;
-          renderHud();
-          renderKeys();
-          renderTowerMap();
 
-          if (state.floorIdx < FLOORS.length - 1) {
-            el.nextBtn.style.display = "inline-block";
-            showMessage("success", `開錠成功！「${validKey.name}」が正しかった。${floorObj.explanation}`);
+          const isPerfect =
+            runState.floorMistakes === 0 && (!runState.floorUsedHint || hasPassive("alchemist_lens"));
+
+          let rewardGold = 25 + (hasPassive("merchant_pouch") ? 25 : 0);
+          if (hasPassive("parity_scale") && (chosen.index + 1) % 2 === 1) {
+            rewardGold += 15;
+          }
+          if (runState.modifier && runState.modifier.id === "thunder" && isPerfect) {
+            rewardGold *= 2;
+          }
+          runState.gold += rewardGold;
+
+          let extraNote = `（+${rewardGold}G獲得）`;
+          if (isPerfect) {
+            runState.combo += 1;
+            runState.perfectCount += 1;
+            if (hasPassive("vampire_ring") && runState.perfectCount % 3 === 0) {
+              runState.maxHp += 1;
+              runState.hp = Math.min(runState.maxHp, runState.hp + 1);
+              extraNote += "【吸血の鍵束発動：最大HP+1＆HP1回復！】";
+            }
           } else {
+            runState.combo = 0;
+          }
+
+          const mult = runState.isAbyss ? 2 : 1;
+          const earnedGears = (isPerfect ? 10 : 5) * mult;
+          metaState.gears += earnedGears;
+          saveMeta(metaState);
+
+          renderAll();
+
+          if (runState.floor >= TOTAL_FLOORS) {
+            const clearBonus = 60 * mult;
+            metaState.gears += clearBonus;
+            const firstClearUnlock = !metaState.abyssUnlocked && !runState.isAbyss;
+            if (!runState.isAbyss) {
+              metaState.abyssUnlocked = true;
+            } else {
+              metaState.abyssCleared = true;
+            }
+            saveMeta(metaState);
+            renderAll();
+
             el.restartBtn.style.display = "inline-block";
-            el.restartBtn.textContent = "最初から再挑戦する";
+            if (!runState.isAbyss) {
+              el.challengeAbyssBtn.style.display = "inline-block";
+              showMessage(
+                "success",
+                `🏆【黒鍵のバベル・全20層制覇！】塔の天頂の封印を解き放ちました（歯車 +${clearBonus}個）！${
+                  firstClearUnlock
+                    ? "さらに高難度モード【逆さまのバベル】が解放されました！"
+                    : "高難度【逆さまのバベル】への挑戦も可能です！"
+                }`
+              );
+            } else {
+              showMessage(
+                "success",
+                `👑【逆さまのバベル・全20層完全制覇！】反転した極限の論理試練を制し、伝説の称号と歯車 +${clearBonus}個を獲得しました！`
+              );
+            }
+          } else {
+            el.nextRouteBtn.style.display = "inline-block";
             showMessage(
               "success",
-              `【全20階制覇】最上階の封印が解かれました！${floorObj.explanation}`
+              `開錠成功！「${chosen.name}」が正解でした！${extraNote} ${p.explanation}`
             );
           }
         } else {
-          state.hp = Math.max(0, state.hp - 1);
-          state.eliminatedIds.add(validKey.id);
-          state.selectedKeyId = null;
-          triggerTrapEffect();
-          renderHud();
-          renderKeys();
+          runState.floorMistakes += 1;
+          runState.combo = 0;
+          runState.eliminatedIds.add(chosen.id);
+          runState.selectedKeyId = null;
 
-          if (state.hp <= 0) {
-            state.isGameOver = true;
+          if (runState.hp === 1 && hasPassive("chrono_watch") && !runState.chronoUsedThisFloor) {
+            runState.chronoUsedThisFloor = true;
+            SoundFX.relic();
+            renderAll();
+            showMessage(
+              "relic",
+              `⏱️ 狂気の懐中時計が逆回転した！致命傷となる罠ダメージを無効化し、「${chosen.name}」を除外しました。`
+            );
+            return;
+          }
+
+          let dmg = 1;
+          if (runState.modifier && runState.modifier.id === "blood") dmg += 1;
+          if (hasPassive("crimson_idol")) dmg += 1;
+
+          SoundFX.trap();
+          triggerShake();
+          runState.hp = Math.max(0, runState.hp - dmg);
+          renderAll();
+
+          if (runState.hp <= 0) {
+            runState.isGameOver = true;
             el.unlockBtn.style.display = "none";
             el.hintBtn.style.display = "none";
             el.clearMemoBtn.style.display = "none";
             el.restartBtn.style.display = "inline-block";
-            el.restartBtn.textContent = "1階から挑戦し直す";
+            const fName = formatFloorName(runState.floor, runState.isAbyss);
             showMessage(
               "trap",
-              `罠発動！${floorObj.trapText} 体力が尽きてしまいました……（第${floorObj.floor}階で力尽きた）`
+              `💀 罠発動！${dmg}ダメージを受け、${fName}で力尽きた……。獲得した「魔導の歯車」は工房に持ち帰られました。`
             );
           } else {
             showMessage(
               "trap",
-              `罠発動！${floorObj.trapText} 体力が 1 減少した（残り体力: ${state.hp} / ${MAX_HP}）。`
+              `罠発動！「${chosen.name}」は偽物だった（${dmg}ダメージ / 残りHP: ${runState.hp}）。`
             );
           }
         }
+      });
+
+      // --- 階層クリア後の「報酬 ＆ 次のルート分岐」モーダル ---
+      el.nextRouteBtn.addEventListener("click", () => {
+        openRewardSelection();
+      });
+
+      function openRewardSelection() {
+        const forceRelic =
+          runState.roomType === "cursed" ||
+          (runState.modifier && runState.modifier.id === "blood") ||
+          runState.floor % 4 === 0;
+
+        el.choiceGrid.innerHTML = "";
+        el.skipChoiceBtn.style.display = "inline-block";
+
+        if (forceRelic) {
+          el.choiceModalTitle.textContent = "✨ 古代遺物（レリック）の選択";
+          el.choiceModalSub.textContent = "今回の探索を永久に強化するパッシブ遺物を1つ選び取れ。";
+
+          const choiceCount = hasPassive("crimson_idol") ? 4 : 3;
+          const unowned = RELIC_POOL.filter((r) => !hasPassive(r.id));
+          const picks = shuffle(unowned.length > 0 ? unowned : RELIC_POOL).slice(0, choiceCount);
+
+          picks.forEach((rel) => {
+            const card = document.createElement("div");
+            card.className = "choice-card" + (rel.cursed ? " curse-route" : "");
+            card.innerHTML = `
+              <div>
+                <div class="choice-icon">${rel.icon}</div>
+                <div class="choice-name">${rel.name}</div>
+                <div class="choice-desc">${rel.desc}</div>
+              </div>
+              <div><span class="choice-tag">${rel.cursed ? "呪いの遺物" : "パッシブ遺物"}</span></div>
+            `;
+            card.addEventListener("click", () => {
+              if (!hasPassive(rel.id)) runState.passives.push(rel);
+              SoundFX.relic();
+              openRouteSelection();
+            });
+            el.choiceGrid.appendChild(card);
+          });
+        } else {
+          el.choiceModalTitle.textContent = "🎒 探索の補給";
+          el.choiceModalSub.textContent = `所持ゴールド: ${runState.gold} G — 次の階層へ備えよ。`;
+
+          const options = [
+            {
+              icon: "👁️",
+              name: "真実の単眼鏡 ×1",
+              desc: "偽物の鍵を即座に1本看破して除外する消耗品を入手。",
+              tag: "無料補給",
+              onPick: () => { runState.consumables.monocle += 1; }
+            },
+            {
+              icon: "🧪",
+              name: "聖女の霊薬 ×1",
+              desc: "任意のタイミングで体力を1回復する霊薬を入手。",
+              tag: "無料補給",
+              onPick: () => { runState.consumables.elixir += 1; }
+            },
+            {
+              icon: "💎",
+              name: "闇市商人の遺物箱（60G）",
+              desc: runState.gold >= 60 ? "60Gを支払い、ランダムなパッシブ遺物を1つ獲得する。" : "ゴールドが不足しています（必要: 60G）",
+              tag: "60 G",
+              disabled: runState.gold < 60,
+              onPick: () => {
+                runState.gold -= 60;
+                const unowned = RELIC_POOL.filter((r) => !hasPassive(r.id));
+                const pool = unowned.length > 0 ? unowned : RELIC_POOL;
+                const got = pool[Math.floor(Math.random() * pool.length)];
+                if (!hasPassive(got.id)) runState.passives.push(got);
+              }
+            }
+          ];
+
+          options.forEach((opt) => {
+            const card = document.createElement("div");
+            card.className = "choice-card";
+            if (opt.disabled) card.style.opacity = "0.45";
+            card.innerHTML = `
+              <div>
+                <div class="choice-icon">${opt.icon}</div>
+                <div class="choice-name">${opt.name}</div>
+                <div class="choice-desc">${opt.desc}</div>
+              </div>
+              <div><span class="choice-tag">${opt.tag}</span></div>
+            `;
+            card.addEventListener("click", () => {
+              if (opt.disabled) return;
+              opt.onPick();
+              SoundFX.relic();
+              openRouteSelection();
+            });
+            el.choiceGrid.appendChild(card);
+          });
+        }
+
+        el.skipChoiceBtn.onclick = () => openRouteSelection();
+        el.choiceModal.classList.add("show");
       }
 
-      el.unlockBtn.addEventListener("click", handleUnlockAttempt);
+      function openRouteSelection() {
+        const nextFloor = runState.floor + 1;
+        const fName = formatFloorName(nextFloor, runState.isAbyss);
+        el.choiceModalTitle.textContent = `🚪 ${fName}への分岐扉`;
+        el.choiceModalSub.textContent = "どの扉をくぐり抜けるか選択してください。";
+        el.choiceGrid.innerHTML = "";
+        el.skipChoiceBtn.style.display = "none";
+
+        const allRoutes = [
+          {
+            type: "normal",
+            css: "",
+            icon: "⚔️",
+            name: "試練の扉（標準ルート）",
+            desc: "通常の論理仕掛けが待ち受ける王道ルート。",
+            tag: "標準リスク"
+          },
+          {
+            type: "cursed",
+            css: "curse-route",
+            icon: "🔮",
+            name: "呪われし宝物庫",
+            desc: "最後の条件文が伏せ字になる高難度扉。突破すれば必ずパッシブ遺物を獲得！",
+            tag: "ハイリスク・遺物確定"
+          },
+          {
+            type: "sanctuary",
+            css: "sanctuary-route",
+            icon: "⛪",
+            name: "静寂の礼拝堂",
+            desc: "扉を開けた瞬間に体力が 1 回復する安息の部屋。",
+            tag: "HP +1 回復"
+          }
+        ];
+
+        const twoRoutes = shuffle(allRoutes).slice(0, 2);
+        twoRoutes.forEach((rt) => {
+          const card = document.createElement("div");
+          card.className = `choice-card ${rt.css}`;
+          card.innerHTML = `
+            <div>
+              <div class="choice-icon">${rt.icon}</div>
+              <div class="choice-name">${rt.name}</div>
+              <div class="choice-desc">${rt.desc}</div>
+            </div>
+            <div><span class="choice-tag">${rt.tag}</span></div>
+          `;
+          card.addEventListener("click", () => {
+            el.choiceModal.classList.remove("show");
+            setupFloor(nextFloor, rt.type);
+          });
+          el.choiceGrid.appendChild(card);
+        });
+      }
+
+      // --- 消耗品使用 ---
+      el.useMonocleBtn.addEventListener("click", () => {
+        if (runState.isCleared || runState.isGameOver || runState.consumables.monocle <= 0) return;
+        const p = runState.currentPuzzle;
+        const fakes = p.keys.filter((k) => k.id !== p.answerId && !runState.eliminatedIds.has(k.id));
+        if (fakes.length === 0) return;
+        const target = fakes[Math.floor(Math.random() * fakes.length)];
+        runState.consumables.monocle -= 1;
+        runState.eliminatedIds.add(target.id);
+        if (runState.selectedKeyId === target.id) runState.selectedKeyId = null;
+        SoundFX.relic();
+        renderAll();
+        showMessage("relic", `👁️ 真実の単眼鏡が「${target.name}（${target.pos}）」を偽物と看破しました！`);
+      });
+
+      el.useElixirBtn.addEventListener("click", () => {
+        if (runState.isCleared || runState.isGameOver || runState.consumables.elixir <= 0 || runState.hp >= runState.maxHp) return;
+        runState.consumables.elixir -= 1;
+        runState.hp = Math.min(runState.maxHp, runState.hp + 1);
+        SoundFX.relic();
+        renderAll();
+        showMessage("relic", "🧪 聖女の霊薬を飲み干し、体力が 1 回復しました！");
+      });
+
+      // --- モード切替ボタン ---
+      el.modeSwitchBtn.addEventListener("click", () => {
+        if (!metaState.abyssUnlocked) {
+          showMessage("warning", "高難度【逆さまのバベル】は、まず「黒鍵のバベル」全20層を制覇すると解放されます！");
+          return;
+        }
+        startNewRun(!runState.isAbyss);
+      });
+
+      el.challengeAbyssBtn.addEventListener("click", () => {
+        startNewRun(true);
+      });
+
+      // --- 工房（メタ強化）モーダル ---
+      function renderWorkshop() {
+        el.workshopGearText.textContent = `現在の所持「魔導の歯車」：${metaState.gears} 個（階層突破や全層制覇で獲得）`;
+        el.upgradeList.innerHTML = "";
+
+        META_UPGRADES.forEach((upg) => {
+          const lv = metaState.upgrades[upg.id] || 0;
+          const isMax = lv >= upg.maxLevel;
+          const cost = upg.baseCost * (lv + 1);
+
+          const row = document.createElement("div");
+          row.className = "upgrade-item";
+          row.innerHTML = `
+            <div>
+              <div class="upgrade-info-title">${upg.name}（Lv.${lv} / ${upg.maxLevel}）</div>
+              <div class="upgrade-info-desc">${upg.desc}</div>
+            </div>
+          `;
+
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "btn btn-primary";
+          btn.style.minHeight = "38px";
+          btn.style.padding = "6px 12px";
+          btn.style.fontSize = "0.8rem";
+
+          if (isMax) {
+            btn.textContent = "強化完了";
+            btn.disabled = true;
+          } else {
+            btn.textContent = `強化 (${cost}歯車)`;
+            btn.disabled = metaState.gears < cost;
+            btn.addEventListener("click", () => {
+              if (metaState.gears < cost) return;
+              metaState.gears -= cost;
+              metaState.upgrades[upg.id] = lv + 1;
+              saveMeta(metaState);
+              SoundFX.relic();
+              renderWorkshop();
+              renderAll();
+            });
+          }
+
+          row.appendChild(btn);
+          el.upgradeList.appendChild(row);
+        });
+      }
+
+      el.openWorkshopBtn.addEventListener("click", () => {
+        renderWorkshop();
+        el.workshopModal.classList.add("show");
+      });
+
+      el.closeWorkshopBtn.addEventListener("click", () => {
+        el.workshopModal.classList.remove("show");
+      });
 
       el.hintBtn.addEventListener("click", () => {
-        if (state.isGameOver) return;
-        const floorObj = getCurrentFloor();
-        showMessage("hint", `手がかりの助言：${floorObj.hint}`);
+        if (runState.isGameOver) return;
+        if (runState.modifier && runState.modifier.id === "silence") return;
+        runState.floorUsedHint = true;
+        showMessage("hint", `手がかりの助言：${runState.currentPuzzle.hint}`);
       });
 
       el.clearMemoBtn.addEventListener("click", () => {
-        if (state.isFloorCleared || state.isGameOver) return;
-        state.eliminatedIds.clear();
+        if (runState.isCleared || runState.isGameOver) return;
+        runState.eliminatedIds.clear();
+        runState.checkedClues.clear();
+        SoundFX.memo();
         clearMessage();
-        renderKeys();
+        renderAll();
       });
 
-      el.nextBtn.addEventListener("click", () => {
-        if (state.floorIdx < FLOORS.length - 1) {
-          loadFloor(state.floorIdx + 1);
+      el.soundToggleBtn.addEventListener("click", () => {
+        const on = SoundFX.toggle();
+        el.soundToggleBtn.textContent = on ? "🔊 音 ON" : "🔇 音 OFF";
+      });
+
+      el.restartBtn.addEventListener("click", () => startNewRun(runState.isAbyss));
+      el.newRunTopBtn.addEventListener("click", () => startNewRun(runState.isAbyss));
+
+      document.addEventListener("keydown", (e) => {
+        if (el.choiceModal.classList.contains("show") || el.workshopModal.classList.contains("show")) return;
+        if (e.key >= "1" && e.key <= "9" && !runState.isCleared && !runState.isGameOver) {
+          const k = runState.currentPuzzle.keys[Number(e.key) - 1];
+          if (k) {
+            runState.eliminatedIds.delete(k.id);
+            runState.selectedKeyId = k.id;
+            SoundFX.select();
+            renderAll();
+          }
         }
       });
 
-      el.restartBtn.addEventListener("click", resetEntireRun);
-
-      loadFloor(0);
+      startNewRun(false);
     })();
   </script>
 </body>
