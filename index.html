@@ -6,22 +6,26 @@
   <title>鍵のかかった時計塔</title>
   <style>
     :root {
-      --bg-parchment: #f3e9d2;
-      --bg-paper: #fbf6eb;
-      --bg-card: #ede0c4;
-      --bg-slot: #e5d4b3;
-      --ink-dark: #2a1c14;
-      --ink-muted: #5e4738;
-      --brass-primary: #9c6f2e;
-      --brass-light: #c99e52;
-      --brass-dark: #634214;
-      --accent-crimson: #8f2424;
-      --accent-emerald: #235c3a;
-      --accent-royal: #2d4c6e;
-      --border-antique: #b59665;
-      --shadow-soft: 0 10px 28px rgba(42, 28, 20, 0.18);
-      --radius-md: 12px;
-      --radius-sm: 8px;
+      --bg-void: #1d1510;
+      --bg-parchment: #f5ecda;
+      --bg-paper: #fcf8ef;
+      --bg-card: #efe2c8;
+      --bg-velvet: #2a1814;
+      --ink-dark: #231710;
+      --ink-muted: #584233;
+      --brass-primary: #9a6c28;
+      --brass-light: #d6ad60;
+      --brass-shine: #f2d593;
+      --brass-dark: #57380e;
+      --accent-crimson: #8f2222;
+      --accent-crimson-light: #b83232;
+      --accent-emerald: #1f5c39;
+      --accent-emerald-light: #2e7d50;
+      --border-antique: #b4935e;
+      --shadow-deep: 0 18px 42px rgba(15, 9, 5, 0.45);
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-sm: 6px;
     }
 
     * {
@@ -33,86 +37,167 @@
       margin: 0;
       padding: 0;
       min-height: 100%;
-      background-color: var(--bg-parchment);
+      background-color: var(--bg-void);
       background-image:
-        radial-gradient(circle at 18% 18%, rgba(190, 155, 100, 0.16) 0%, transparent 45%),
-        radial-gradient(circle at 82% 82%, rgba(139, 94, 43, 0.14) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 0%, rgba(154, 108, 40, 0.22) 0%, transparent 65%),
+        radial-gradient(circle at 15% 85%, rgba(143, 34, 34, 0.14) 0%, transparent 50%),
         repeating-linear-gradient(
-          0deg,
-          rgba(92, 69, 54, 0.03) 0px,
-          rgba(92, 69, 54, 0.03) 1px,
+          45deg,
+          rgba(255, 255, 255, 0.015) 0px,
+          rgba(255, 255, 255, 0.015) 1px,
           transparent 1px,
-          transparent 4px
+          transparent 8px
         );
       color: var(--ink-dark);
       font-family: "Hiragino Mincho ProN", "Yu Mincho", "Noto Serif JP", Georgia, serif;
       line-height: 1.65;
     }
 
-    .app-shell {
-      max-width: 780px;
-      margin: 0 auto;
-      padding: 16px 14px 36px;
+    /* 背景の巨大な装飾歯車（視認性を邪魔しない極薄レイヤー） */
+    .bg-gear-layer {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+      opacity: 0.14;
     }
 
+    .bg-gear {
+      position: absolute;
+      fill: none;
+      stroke: var(--brass-light);
+      stroke-width: 1.5;
+    }
+
+    .gear-left {
+      width: 340px;
+      height: 340px;
+      top: -80px;
+      left: -90px;
+      animation: spinSlow 90s linear infinite;
+    }
+
+    .gear-right {
+      width: 420px;
+      height: 420px;
+      bottom: -120px;
+      right: -110px;
+      animation: spinSlowReverse 120s linear infinite;
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes spinSlowReverse {
+      from { transform: rotate(360deg); }
+      to { transform: rotate(0deg); }
+    }
+
+    .app-shell {
+      position: relative;
+      z-index: 1;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 18px 14px 40px;
+    }
+
+    /* 真鍮の二重額縁を持つメイン羊皮紙フレーム */
     .antique-frame {
       background: var(--bg-paper);
-      border: 3px double var(--border-antique);
-      border-radius: var(--radius-md);
-      box-shadow: var(--shadow-soft), inset 0 0 28px rgba(181, 150, 101, 0.24);
-      padding: 22px 20px;
+      background-image:
+        radial-gradient(circle at 50% 0%, rgba(214, 173, 96, 0.14) 0%, transparent 60%),
+        linear-gradient(180deg, #fdfaf2 0%, #f5ebd6 100%);
+      border: 2px solid var(--brass-primary);
+      outline: 4px solid #382618;
+      outline-offset: -8px;
+      border-radius: var(--radius-lg);
+      box-shadow:
+        var(--shadow-deep),
+        inset 0 0 36px rgba(154, 108, 40, 0.22);
+      padding: 28px 24px 24px;
       position: relative;
-      transition: transform 0.15s ease;
     }
 
+    /* 四隅の真鍮コーナープレート装飾 */
+    .corner-plate {
+      position: absolute;
+      width: 26px;
+      height: 26px;
+      pointer-events: none;
+      z-index: 2;
+    }
+    .corner-plate::before,
+    .corner-plate::after {
+      content: "";
+      position: absolute;
+      background: linear-gradient(135deg, var(--brass-shine), var(--brass-primary));
+    }
+    .corner-tl { top: 10px; left: 10px; }
+    .corner-tl::before { top: 0; left: 0; width: 22px; height: 3px; }
+    .corner-tl::after { top: 0; left: 0; width: 3px; height: 22px; }
+
+    .corner-tr { top: 10px; right: 10px; }
+    .corner-tr::before { top: 0; right: 0; width: 22px; height: 3px; }
+    .corner-tr::after { top: 0; right: 0; width: 3px; height: 22px; }
+
+    .corner-bl { bottom: 10px; left: 10px; }
+    .corner-bl::before { bottom: 0; left: 0; width: 22px; height: 3px; }
+    .corner-bl::after { bottom: 0; left: 0; width: 3px; height: 22px; }
+
+    .corner-br { bottom: 10px; right: 10px; }
+    .corner-br::before { bottom: 0; right: 0; width: 22px; height: 3px; }
+    .corner-br::after { bottom: 0; right: 0; width: 3px; height: 22px; }
+
     .antique-frame.shake {
-      animation: trapShake 0.42s cubic-bezier(.36,.07,.19,.97) both;
+      animation: trapShake 0.44s cubic-bezier(.36,.07,.19,.97) both;
     }
 
     @keyframes trapShake {
-      10%, 90% { transform: translate3d(-2px, 0, 0); }
-      20%, 80% { transform: translate3d(4px, 0, 0); }
-      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
-      40%, 60% { transform: translate3d(6px, 0, 0); }
+      10%, 90% { transform: translate3d(-3px, 0, 0); }
+      20%, 80% { transform: translate3d(5px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-7px, 0, 0); }
+      40%, 60% { transform: translate3d(7px, 0, 0); }
     }
 
-    .corner-ornament {
-      position: absolute;
-      width: 18px;
-      height: 18px;
-      border-color: var(--brass-primary);
-      border-style: solid;
-      pointer-events: none;
-    }
-    .corner-tl { top: 8px; left: 8px; border-width: 2px 0 0 2px; }
-    .corner-tr { top: 8px; right: 8px; border-width: 2px 2px 0 0; }
-    .corner-bl { bottom: 8px; left: 8px; border-width: 0 0 2px 2px; }
-    .corner-br { bottom: 8px; right: 8px; border-width: 0 2px 2px 0; }
-
+    /* ヘッダー（時計文字盤風のエンブレム） */
     header {
       text-align: center;
-      border-bottom: 1px solid var(--border-antique);
-      padding-bottom: 12px;
-      margin-bottom: 14px;
+      padding-bottom: 14px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    header::after {
+      content: "❖ ─────── ⚙ ─────── ❖";
+      display: block;
+      margin-top: 10px;
+      font-size: 0.78rem;
+      letter-spacing: 0.2em;
+      color: var(--brass-primary);
     }
 
     .subtitle-badge {
       display: inline-block;
-      font-size: 0.75rem;
-      letter-spacing: 0.18em;
-      color: var(--brass-dark);
-      background: var(--bg-card);
-      border: 1px solid var(--border-antique);
-      padding: 2px 14px;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+      color: #fffaf0;
+      background: linear-gradient(180deg, #4b3321 0%, #2c1d12 100%);
+      border: 1px solid var(--brass-light);
+      padding: 3px 16px;
       border-radius: 999px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     }
 
     h1 {
       margin: 0;
-      font-size: clamp(1.3rem, 4vw, 1.8rem);
+      font-size: clamp(1.35rem, 4.2vw, 1.9rem);
       color: var(--ink-dark);
       letter-spacing: 0.08em;
+      text-shadow: 0 1px 0 rgba(255, 255, 255, 0.9);
     }
 
     .header-desc {
@@ -121,18 +206,20 @@
       color: var(--ink-muted);
     }
 
-    /* ステータスバー（階層・体力・進行度） */
+    /* 重厚な真鍮プレート風HUDバー */
     .hud-bar {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
-      background: var(--bg-card);
-      border: 1px solid var(--border-antique);
-      border-radius: var(--radius-sm);
-      padding: 10px 14px;
+      background: linear-gradient(180deg, #3a2719 0%, #261910 100%);
+      border: 1px solid var(--brass-light);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
       margin-bottom: 14px;
+      color: #fcf6e8;
+      box-shadow: 0 4px 12px rgba(24, 15, 8, 0.25);
     }
 
     .floor-info {
@@ -143,53 +230,100 @@
     }
 
     .floor-badge {
-      background: var(--brass-dark);
-      color: #fffdf8;
+      background: linear-gradient(180deg, var(--brass-shine) 0%, var(--brass-primary) 100%);
+      color: #1f1309;
       font-weight: bold;
-      font-size: 0.95rem;
-      padding: 4px 12px;
-      border-radius: 6px;
+      font-size: 0.94rem;
+      padding: 4px 13px;
+      border-radius: var(--radius-sm);
       letter-spacing: 0.06em;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65), 0 2px 4px rgba(0, 0, 0, 0.35);
     }
 
     .tier-label {
-      font-size: 0.85rem;
-      color: var(--ink-muted);
-      font-weight: bold;
+      font-size: 0.88rem;
+      color: #e6d3b1;
+      letter-spacing: 0.04em;
     }
 
     .hp-display {
       display: flex;
       align-items: center;
-      gap: 6px;
-      background: #fffcf5;
-      border: 1px solid var(--border-antique);
-      padding: 4px 12px;
+      gap: 8px;
+      background: rgba(15, 9, 5, 0.55);
+      border: 1px solid rgba(214, 173, 96, 0.5);
+      padding: 4px 14px;
       border-radius: 999px;
-      font-weight: bold;
-      font-size: 0.92rem;
+      font-size: 0.86rem;
+      color: #e6d3b1;
     }
 
     .hearts {
-      letter-spacing: 0.12em;
-      font-size: 1.05rem;
+      display: inline-flex;
+      gap: 4px;
+      font-size: 1.15rem;
+      line-height: 1;
     }
 
-    .heart-full { color: var(--accent-crimson); }
-    .heart-empty { color: #cbbba3; }
+    .heart-full {
+      color: #e04848;
+      text-shadow: 0 0 8px rgba(224, 72, 72, 0.65);
+      transition: transform 0.25s ease;
+    }
+
+    .heart-empty {
+      color: #5c4938;
+    }
+
+    /* 登頂プログレスゲージ（1〜20階ミニバー） */
+    .tower-progress-wrap {
+      margin-bottom: 14px;
+    }
+
+    .progress-track {
+      display: grid;
+      grid-template-columns: repeat(20, 1fr);
+      gap: 3px;
+      background: #e5d5b7;
+      padding: 4px;
+      border-radius: 6px;
+      border: 1px solid var(--border-antique);
+    }
+
+    .progress-pip {
+      height: 8px;
+      border-radius: 2px;
+      background: #cbb692;
+      position: relative;
+      transition: background-color 0.25s ease;
+    }
+
+    .progress-pip.heal-pip {
+      background: #9ec4ad;
+    }
+
+    .progress-pip.cleared {
+      background: var(--brass-primary);
+    }
+
+    .progress-pip.current {
+      background: var(--accent-crimson);
+      box-shadow: 0 0 6px rgba(143, 34, 34, 0.6);
+    }
 
     /* 回復スポットバナー */
     .sanctuary-banner {
       display: none;
-      background: linear-gradient(90deg, rgba(35, 92, 58, 0.12) 0%, rgba(201, 158, 82, 0.16) 100%);
+      background: linear-gradient(180deg, #ebf7f0 0%, #d8eee1 100%);
       border: 1px solid var(--accent-emerald);
-      color: var(--accent-emerald);
+      border-left: 5px solid var(--accent-emerald);
+      color: #164429;
       border-radius: var(--radius-sm);
       padding: 10px 14px;
       margin-bottom: 14px;
       font-size: 0.92rem;
       font-weight: bold;
-      text-align: center;
+      box-shadow: 0 3px 10px rgba(31, 92, 57, 0.12);
     }
 
     .sanctuary-banner.show {
@@ -197,28 +331,47 @@
       animation: fadeIn 0.3s ease;
     }
 
-    /* 問題・証言パネル */
+    /* 羊皮紙の碑文・条件カード（高コントラストで読みやすさ最優先） */
     .story-box {
-      background: #fffcf5;
-      border-left: 4px solid var(--brass-primary);
-      border-top: 1px solid rgba(181, 150, 101, 0.45);
-      border-right: 1px solid rgba(181, 150, 101, 0.45);
-      border-bottom: 1px solid rgba(181, 150, 101, 0.45);
-      border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      padding: 14px 16px;
-      margin-bottom: 16px;
+      background: #fffdf8;
+      border: 1px solid var(--border-antique);
+      border-top: 3px solid var(--brass-primary);
+      border-radius: var(--radius-md);
+      padding: 16px 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 14px rgba(42, 28, 20, 0.08);
+    }
+
+    .problem-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
     }
 
     .problem-title {
-      font-size: 1.06rem;
+      font-size: 1.1rem;
       font-weight: bold;
-      margin: 0 0 6px;
+      margin: 0;
       color: var(--brass-dark);
+    }
+
+    .key-count-pill {
+      font-size: 0.76rem;
+      font-weight: bold;
+      color: var(--ink-muted);
+      background: var(--bg-card);
+      border: 1px solid var(--border-antique);
+      padding: 2px 10px;
+      border-radius: 999px;
+      white-space: nowrap;
     }
 
     .problem-text {
       margin: 0 0 12px;
-      font-size: 0.94rem;
+      font-size: 0.95rem;
+      color: var(--ink-dark);
     }
 
     .clues-list {
@@ -230,60 +383,77 @@
     }
 
     .clues-list li {
-      background: var(--bg-card);
-      border: 1px solid rgba(181, 150, 101, 0.65);
-      border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 0.93rem;
+      background: #f7eedc;
+      border: 1px solid rgba(154, 108, 40, 0.38);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      font-size: 0.95rem;
+      color: #1f140d;
       display: flex;
       align-items: flex-start;
-      gap: 8px;
+      gap: 10px;
     }
 
-    .clue-num {
+    /* 封蝋（ワックスシール）風の条件番号バッジ */
+    .clue-seal {
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      min-width: 22px;
-      height: 22px;
+      min-width: 24px;
+      height: 24px;
       border-radius: 50%;
-      background: var(--brass-primary);
-      color: #fff;
+      background: radial-gradient(circle at 35% 35%, #b53838, #781919);
+      border: 1px solid #e09f9f;
+      color: #fffaf0;
       font-size: 0.78rem;
       font-weight: bold;
-      margin-top: 2px;
+      margin-top: 1px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
     }
 
-    /* 鍵選択エリア（台座に並んだ鍵） */
+    /* ベルベット調の鍵展示台座 */
     .workspace {
-      background: rgba(237, 224, 196, 0.6);
-      border: 1px dashed var(--brass-primary);
-      border-radius: var(--radius-md);
-      padding: 16px 12px;
+      background: linear-gradient(180deg, #321f19 0%, #231510 100%);
+      border: 2px solid var(--brass-primary);
+      border-radius: var(--radius-lg);
+      padding: 16px 14px 18px;
       margin-bottom: 16px;
+      box-shadow: inset 0 4px 18px rgba(0, 0, 0, 0.65), 0 6px 16px rgba(35, 21, 16, 0.22);
+    }
+
+    .workspace-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 12px;
+      padding: 0 4px;
     }
 
     .workspace-label {
       font-size: 0.86rem;
       font-weight: bold;
-      color: var(--ink-muted);
-      margin-bottom: 12px;
-      text-align: center;
+      color: #f3e2c1;
+    }
+
+    .workspace-sub {
+      font-size: 0.76rem;
+      color: #cbb48e;
     }
 
     .keys-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(134px, 1fr));
       gap: 10px;
     }
 
+    /* 鍵カード（視認性の高い象牙色プレート＋真鍮枠） */
     .key-card {
-      appearance: none;
-      background: linear-gradient(180deg, #fffdf8 0%, #efe1c4 100%);
-      border: 2px solid var(--border-antique);
-      border-radius: var(--radius-sm);
-      padding: 10px 8px;
-      font-family: inherit;
+      background: linear-gradient(180deg, #fffdf9 0%, #f1e3c6 100%);
+      border: 2px solid #9e7840;
+      border-radius: var(--radius-md);
+      padding: 10px 8px 9px;
       color: var(--ink-dark);
       cursor: pointer;
       display: flex;
@@ -291,84 +461,134 @@
       align-items: center;
       text-align: center;
       position: relative;
-      transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease, opacity 0.15s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+      transition: transform 0.16s ease, border-color 0.16s ease, box-shadow 0.16s ease, opacity 0.18s ease;
+      user-select: none;
     }
 
-    .key-card:hover:not(:disabled) {
-      border-color: var(--brass-primary);
-      transform: translateY(-2px);
+    .key-card:hover:not(.locked-card) {
+      transform: translateY(-3px);
+      border-color: var(--brass-shine);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5), 0 0 12px rgba(214, 173, 96, 0.35);
     }
 
     .key-card.selected {
-      border-color: var(--accent-crimson);
-      background: linear-gradient(180deg, #fff8f5 0%, #f9e4dc 100%);
-      box-shadow: 0 0 0 3px rgba(143, 36, 36, 0.22);
+      border-color: #d94343;
+      background: linear-gradient(180deg, #fff9f7 0%, #fae3dc 100%);
+      transform: translateY(-3px);
+      box-shadow:
+        0 0 0 3px rgba(217, 67, 67, 0.45),
+        0 10px 20px rgba(0, 0, 0, 0.55);
+    }
+
+    .key-card.selected::before {
+      content: "選択中";
+      position: absolute;
+      top: -9px;
+      right: 8px;
+      background: var(--accent-crimson);
+      color: #fff;
+      font-size: 0.68rem;
+      font-weight: bold;
+      padding: 1px 8px;
+      border-radius: 999px;
+      border: 1px solid #f7caca;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
 
     .key-card.eliminated {
-      opacity: 0.42;
-      background: #e5dccb;
+      opacity: 0.44;
+      background: #cfc2ab;
       border-style: dashed;
+      border-color: #7d6b53;
+      transform: none;
+      box-shadow: none;
     }
 
-    .key-card:disabled {
-      cursor: not-allowed;
+    .key-card.correct-reveal {
+      border-color: var(--accent-emerald);
+      background: linear-gradient(180deg, #f2fbf6 0%, #d4eedf 100%);
+      box-shadow: 0 0 0 3px rgba(46, 125, 80, 0.5), 0 8px 20px rgba(0, 0, 0, 0.45);
     }
 
     .pos-tag {
       font-size: 0.74rem;
       font-weight: bold;
       color: var(--brass-dark);
-      background: rgba(181, 150, 101, 0.25);
-      padding: 2px 8px;
+      background: rgba(154, 108, 40, 0.16);
+      border: 1px solid rgba(154, 108, 40, 0.3);
+      padding: 1px 8px;
       border-radius: 4px;
       margin-bottom: 6px;
       width: 100%;
     }
 
+    .key-emblem-ring {
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #fffdf8, #e6d1a7);
+      border: 1.5px solid var(--brass-primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 2px 0 6px;
+      box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8), 0 2px 4px rgba(42, 28, 20, 0.16);
+    }
+
     .key-icon {
-      font-size: 1.7rem;
-      line-height: 1.2;
-      margin: 2px 0 4px;
+      font-size: 1.5rem;
+      line-height: 1;
     }
 
     .key-name {
-      font-size: 0.92rem;
+      font-size: 0.94rem;
       font-weight: bold;
+      color: #1f140d;
       line-height: 1.3;
     }
 
     .key-sub {
-      font-size: 0.76rem;
-      color: var(--ink-muted);
-      margin-top: 2px;
+      font-size: 0.78rem;
+      color: #4f3a2c;
+      margin-top: 3px;
+      line-height: 1.35;
     }
 
-    /* 推理メモ用除外ボタン */
     .memo-toggle {
       margin-top: 8px;
+      width: 100%;
+      font-family: inherit;
       font-size: 0.74rem;
-      padding: 3px 8px;
+      font-weight: bold;
+      padding: 4px 6px;
       border-radius: 4px;
       border: 1px solid var(--border-antique);
-      background: var(--bg-paper);
+      background: rgba(255, 253, 248, 0.85);
       color: var(--ink-muted);
       cursor: pointer;
+      transition: background-color 0.15s ease, color 0.15s ease;
     }
 
-    .memo-toggle:hover {
-      background: var(--bg-card);
+    .memo-toggle:hover:not(:disabled) {
+      background: #e9d7b5;
       color: var(--ink-dark);
     }
 
-    /* メッセージバナー */
+    .memo-toggle:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* 判定フィードバックバナー */
     .message-banner {
       display: none;
-      border-radius: var(--radius-sm);
-      padding: 12px 14px;
-      margin-bottom: 14px;
-      font-size: 0.93rem;
+      border-radius: var(--radius-md);
+      padding: 13px 16px;
+      margin-bottom: 16px;
+      font-size: 0.94rem;
       font-weight: bold;
+      line-height: 1.6;
       animation: fadeIn 0.25s ease;
     }
 
@@ -377,31 +597,33 @@
     }
 
     .message-warning {
-      background: #fdf2e9;
-      border: 1px solid #d35400;
-      color: #873600;
+      background: #fef5e7;
+      border: 1.5px solid #c86d1f;
+      color: #7a3b08;
     }
 
     .message-trap {
-      background: #fdedec;
+      background: #fdf0ef;
       border: 2px solid var(--accent-crimson);
-      color: var(--accent-crimson);
+      color: #7d1818;
+      box-shadow: 0 4px 12px rgba(143, 34, 34, 0.14);
     }
 
     .message-success {
-      background: #eafaf1;
-      border: 1px solid var(--accent-emerald);
-      color: var(--accent-emerald);
+      background: #edf9f2;
+      border: 2px solid var(--accent-emerald);
+      color: #15472a;
+      box-shadow: 0 4px 12px rgba(31, 92, 57, 0.14);
     }
 
     .message-hint {
-      background: #f4f1ea;
-      border: 1px solid var(--brass-primary);
+      background: #f8f2e4;
+      border: 1.5px solid var(--brass-primary);
       color: var(--ink-dark);
       font-weight: normal;
     }
 
-    /* 操作ボタン */
+    /* アクションボタン群（真鍮レリーフボタン） */
     .actions-row {
       display: flex;
       flex-wrap: wrap;
@@ -414,66 +636,84 @@
       font-family: inherit;
       font-size: 0.94rem;
       font-weight: bold;
-      padding: 11px 20px;
+      padding: 11px 22px;
       border-radius: var(--radius-sm);
       cursor: pointer;
-      border: 2px solid transparent;
-      transition: all 0.16s ease;
-      min-height: 44px;
+      border: 1.5px solid transparent;
+      transition: transform 0.12s ease, filter 0.15s ease, box-shadow 0.15s ease;
+      min-height: 46px;
+      letter-spacing: 0.04em;
+    }
+
+    .btn:active:not(:disabled) {
+      transform: translateY(1px);
     }
 
     .btn-primary {
-      background: linear-gradient(180deg, var(--brass-light) 0%, var(--brass-primary) 100%);
+      background: linear-gradient(180deg, var(--brass-shine) 0%, var(--brass-primary) 100%);
       border-color: var(--brass-dark);
-      color: #fffdf8;
-      box-shadow: 0 3px 8px rgba(99, 66, 20, 0.3);
+      color: #1f1309;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.6), 0 4px 10px rgba(87, 56, 14, 0.32);
     }
 
     .btn-primary:hover:not(:disabled) {
-      filter: brightness(1.06);
+      filter: brightness(1.05);
     }
 
     .btn-primary:disabled {
       opacity: 0.45;
       cursor: not-allowed;
+      box-shadow: none;
     }
 
     .btn-secondary {
-      background: var(--bg-paper);
+      background: linear-gradient(180deg, #fffdf8 0%, #efe1c6 100%);
       border-color: var(--border-antique);
       color: var(--ink-dark);
+      box-shadow: 0 2px 6px rgba(42, 28, 20, 0.1);
     }
 
-    .btn-secondary:hover {
-      background: var(--bg-card);
+    .btn-secondary:hover:not(:disabled) {
+      background: #e8d5b2;
     }
 
     .btn-next {
-      background: var(--accent-emerald);
-      border-color: #193e27;
-      color: #fff;
+      background: linear-gradient(180deg, var(--accent-emerald-light) 0%, var(--accent-emerald) 100%);
+      border-color: #123b23;
+      color: #fffdf8;
+      box-shadow: 0 4px 12px rgba(31, 92, 57, 0.35);
+    }
+
+    .btn-next:hover {
+      filter: brightness(1.06);
     }
 
     .btn-danger {
-      background: var(--accent-crimson);
-      border-color: #5c1414;
-      color: #fff;
+      background: linear-gradient(180deg, var(--accent-crimson-light) 0%, var(--accent-crimson) 100%);
+      border-color: #541010;
+      color: #fffdf8;
+      box-shadow: 0 4px 12px rgba(143, 34, 34, 0.35);
     }
 
-    /* 階層マップ一覧（折りたたみ式） */
+    /* 階層見取り図ドロワー */
     .tower-drawer {
       margin-top: 18px;
-      border-top: 1px solid var(--border-antique);
+      border-top: 1px solid rgba(154, 108, 40, 0.4);
       padding-top: 12px;
     }
 
     .tower-drawer summary {
       cursor: pointer;
-      font-size: 0.86rem;
+      font-size: 0.85rem;
       font-weight: bold;
       color: var(--brass-dark);
       text-align: center;
       user-select: none;
+      list-style: none;
+    }
+
+    .tower-drawer summary::-webkit-details-marker {
+      display: none;
     }
 
     .floor-grid {
@@ -484,12 +724,12 @@
     }
 
     .floor-node {
-      font-size: 0.78rem;
+      font-size: 0.76rem;
       text-align: center;
       padding: 5px 2px;
       border-radius: 5px;
       border: 1px solid var(--border-antique);
-      background: var(--bg-paper);
+      background: #fffdf8;
       color: var(--ink-muted);
     }
 
@@ -497,11 +737,12 @@
       border-color: var(--accent-emerald);
       color: var(--accent-emerald);
       font-weight: bold;
+      background: #eff9f3;
     }
 
     .floor-node.cleared {
       background: var(--brass-primary);
-      color: #fff;
+      color: #fffdf8;
       border-color: var(--brass-dark);
     }
 
@@ -516,12 +757,13 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    @media (max-width: 480px) {
+    @media (max-width: 520px) {
       .app-shell {
-        padding: 10px 8px 24px;
+        padding: 10px 8px 28px;
       }
       .antique-frame {
-        padding: 16px 12px;
+        padding: 20px 14px 18px;
+        outline-offset: -5px;
       }
       .keys-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -529,16 +771,35 @@
       .btn {
         width: 100%;
       }
+      .floor-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
     }
   </style>
 </head>
 <body>
+  <!-- 背景の精密歯車装飾 -->
+  <div class="bg-gear-layer" aria-hidden="true">
+    <svg class="bg-gear gear-left" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="34" />
+      <circle cx="50" cy="50" r="24" stroke-dasharray="4 3" />
+      <circle cx="50" cy="50" r="10" />
+      <path d="M50 6 V16 M50 84 V94 M6 50 H16 M84 50 H94 M19 19 L26 26 M74 74 L81 81 M81 19 L74 26 M26 74 L19 81" stroke-width="3" />
+    </svg>
+    <svg class="bg-gear gear-right" viewBox="0 0 100 100">
+      <circle cx="50" cy="50" r="38" />
+      <circle cx="50" cy="50" r="28" stroke-dasharray="3 4" />
+      <circle cx="50" cy="50" r="12" />
+      <path d="M50 4 V14 M50 86 V96 M4 50 H14 M86 50 H96 M17 17 L25 25 M75 75 L83 83 M83 17 L75 25 M25 75 L17 83" stroke-width="3" />
+    </svg>
+  </div>
+
   <div class="app-shell">
     <main class="antique-frame" id="mainFrame" role="main" aria-labelledby="app-title">
-      <div class="corner-ornament corner-tl" aria-hidden="true"></div>
-      <div class="corner-ornament corner-tr" aria-hidden="true"></div>
-      <div class="corner-ornament corner-bl" aria-hidden="true"></div>
-      <div class="corner-ornament corner-br" aria-hidden="true"></div>
+      <div class="corner-plate corner-tl" aria-hidden="true"></div>
+      <div class="corner-plate corner-tr" aria-hidden="true"></div>
+      <div class="corner-plate corner-bl" aria-hidden="true"></div>
+      <div class="corner-plate corner-br" aria-hidden="true"></div>
 
       <header>
         <div class="subtitle-badge">THE TWENTY-STORY CLOCKTOWER</div>
@@ -553,21 +814,29 @@
         </div>
         <div class="hp-display" aria-label="残り体力">
           <span>体力</span>
-          <span class="hearts" id="heartsDisplay">♥♥♥</span>
+          <span class="hearts" id="heartsDisplay"></span>
         </div>
       </section>
+
+      <div class="tower-progress-wrap" aria-label="登頂進捗ゲージ">
+        <div class="progress-track" id="progressTrack"></div>
+      </div>
 
       <div class="sanctuary-banner" id="sanctuaryBanner" role="status"></div>
 
       <section class="story-box" aria-live="polite">
-        <h2 class="problem-title" id="problemTitle"></h2>
+        <div class="problem-header-row">
+          <h2 class="problem-title" id="problemTitle"></h2>
+          <span class="key-count-pill" id="keyCountPill"></span>
+        </div>
         <p class="problem-text" id="problemText"></p>
         <ul class="clues-list" id="cluesList"></ul>
       </section>
 
       <section class="workspace" aria-label="鍵の選択台座">
-        <div class="workspace-label">
-          扉を開ける「本物の鍵」を1本選択してください（偽物だと思う鍵は「除外メモ」で伏せられます）
+        <div class="workspace-header">
+          <span class="workspace-label">扉に差し込む「本物の鍵」を1本選択</span>
+          <span class="workspace-sub">偽物だと思う鍵は「除外メモ」で伏せられます</span>
         </div>
         <div class="keys-grid" id="keysGrid"></div>
       </section>
@@ -583,7 +852,7 @@
       </div>
 
       <details class="tower-drawer">
-        <summary>時計塔の構造図（全20階・回復ポイント確認）</summary>
+        <summary>▾ 時計塔の構造図（全20階・回復スポット一覧） ▾</summary>
         <div class="floor-grid" id="floorGrid"></div>
       </details>
     </main>
@@ -595,13 +864,8 @@
 
       const MAX_HP = 3;
 
-      /**
-       * 全20階層の論理推理問題データ
-       * ・上層へ進むほど鍵の本数（ダミー）が増加し、位置・材質・紋章・相対位置など複合条件へと深化
-       * ・すべての階層で「本物の鍵」は論理的に1本のみへ一意に絞り込まれる設計
-       */
       const FLOORS = [
-        // --- 1〜5階：序層（鍵3〜4本・基礎消去法と位置推理） ---
+        // --- 1〜5階：序層 ---
         {
           floor: 1,
           tier: "序層：試練の入口",
@@ -632,13 +896,13 @@
             { id: "k3", pos: "3番目（右）", name: "黒曜の鍵", sub: "冷たい柄", icon: "🗡️" }
           ],
           clues: [
-            "本物の鍵は、「白銀の鍵」よりも左側に置かれている。",
+            "本物の鍵は、「黒曜の鍵」よりも左側に置かれている。",
             "「錆びた柄」を持つ鍵は罠の鍵である。"
           ],
           answerId: "k2",
           trapText: "罠が作動し、天井から重たい砂袋が落下した！",
-          hint: "「白銀の鍵より左側」にあるのは1番目だけですが、条件2をよく読んでみてください……おっと、待ってください。",
-          explanation: "……失礼、碑文を再確認しましょう。1番目は錆びた柄で罠。実は碑文1は「白銀の鍵より左側にはない」の誤読ではなく、条件を満たす配置を精査すると2番目の白銀の鍵こそが唯一無傷で残ります。"
+          hint: "「黒曜の鍵（3番目）より左側」にあるのは1番目と2番目です。そこから錆びた柄を除きましょう。",
+          explanation: "黒曜の鍵より左側（1番目・2番目）のうち、錆びた柄の1番目を除外した2番目の「白銀の鍵」が正解です。"
         },
         {
           floor: 3,
@@ -703,7 +967,7 @@
           explanation: "1番目より右側（2・3・4番目）から、珊瑚（3番目）と真珠（4番目）を除いた2番目の「木漏れ日の鍵」が本物です。"
         },
 
-        // --- 6〜10階：中層（鍵5本・対偶と否定の推理） ---
+        // --- 6〜10階：中層 ---
         {
           floor: 6,
           tier: "中層：歯車の回廊",
@@ -815,7 +1079,7 @@
           explanation: "金（1・3）、赤い紐（1・4）、右端（5）をすべて除外すると、銀で青い紐の「聖剣の鍵（左から2）」が残ります。"
         },
 
-        // --- 11〜15階：上層（鍵6本・複合条件と位置関係） ---
+        // --- 11〜15階：上層 ---
         {
           floor: 11,
           tier: "上層：星見の螺旋",
@@ -928,7 +1192,7 @@
           explanation: "菱形の2番目・4番目のうち、左から3より左にある2番目の「瑠璃蝶の鍵」が正解です。"
         },
 
-        // --- 16〜20階：最上層（鍵7本・高難度論理パズル） ---
+        // --- 16〜20階：最上層 ---
         {
           floor: 16,
           tier: "最上層：時計仕掛けの聖域",
@@ -1029,100 +1293,27 @@
           floor: 20,
           tier: "最上階：天頂の間の扉",
           title: "第20階：封魔の天頂扉",
-          text: "ついに最上階（20階）へ到達しました。7本の最後の鍵から、永遠の時計塔を解き放つ1本を選び抜いてください。",
+          text: "ついに最上階（20階）へ到達しました。7本の最後の鍵から、時計塔の封印を解く唯一の1本を選び抜いてください。",
           keys: [
             { id: "k1", pos: "左から1", name: "始まりの鍵", sub: "札「私は偽物だ」", icon: "🌅" },
             { id: "k2", pos: "左から2", name: "記憶の鍵", sub: "札「左から4が本物だ」", icon: "📜" },
             { id: "k3", pos: "左から3", name: "均衡の鍵", sub: "札「両端のどちらかが本物」", icon: "⚖️" },
-            { id: "k4", pos: "左から4", name: "真実の鍵", sub: "札「私は偽物ではない」", icon: "💎" },
-            { id: "k5", pos: "左から5", name: "宿命の鍵", sub: "札「左から6が本物だ」", icon: "🔮" },
-            { id: "k6", pos: "左から6", name: "終焉の鍵", sub: "札「左から2と5はどちらも嘘」", icon: "🌑" },
+            { id: "k4", pos: "左から4", name: "真実の鍵", sub: "札「左から6は偽物だ」", icon: "💎" },
+            { id: "k5", pos: "左から5", name: "宿命の鍵", sub: "札「左から7が本物だ」", icon: "🔮" },
+            { id: "k6", pos: "左から6", name: "終焉の鍵", sub: "札「左から2と3はどちらも嘘」", icon: "🌑" },
             { id: "k7", pos: "左から7", name: "輪廻の鍵", sub: "札「左から1が本物だ」", icon: "♾️" }
           ],
           clues: [
             "7本の鍵のうち、本物は1本だけである。",
             "「本物の鍵の札だけが真実」を述べており、残り6本の偽物の札は「すべて嘘」をついている。",
-            "矛盾が一切生じない唯一の鍵を選び出せ。"
+            "7つの発言すべてに矛盾が生じない唯一の鍵を選び出せ。"
           ],
           answerId: "k6",
           trapText: "天頂の封印が暴走し、激しい魔力の奔流が押し寄せた！",
-          hint: "もし4番目が本物だとすると、2番目「4が本物」も真実になってしまい「真実は1つだけ」に矛盾します。6番目が本物の場合を検証してみましょう。",
-          explanation: "6番目（終焉の鍵）が本物なら、6番目の札「2と5はどちらも嘘」は真実となり、他の6つの札（1:矛盾、2:4が本物→嘘、3:両端→嘘、4:偽物でない→嘘、5:6が本物→…おっと、5番目が『6が本物』と言うと5も真実になるため矛盾？いいえ、6番目が本物なら5番目も真実になるため、実は6番目ではなく『4番目が本物なら2番目も真実』と同様の検証が必要です。……待ってください！6番目が本物だと5番目が真実になり矛盾します。では『4番目』でも『6番目』でもないとすると、どれが矛盾しないでしょうか？実は2番目が本物なら4が本物→矛盾、5番目が本物なら6が本物→矛盾。では『4番目』の札をよく見ると、4番目が本物のとき2番目も真実になるため4は偽物。ここで6番目の札『2と5は嘘』が真実なら、2も5も嘘＝4も6も本物ではないことになり自己矛盾します！つまり6番目は嘘をついており、『2か5のどちらかが本物』です。2が本物だと『4が本物』が真実になり矛盾するため、残る『5番目』……ではなく、もう一度整理すると、2番目が『4が本物』と言っている以上、4が本物なら2も真実になり破綻します。よって4は偽物、ゆえに2も嘘。次に6が本物なら5『6が本物』も真実になり破綻。よって6も偽物。6が偽物なら『2と5はどちらも嘘』が嘘＝『2か5のどちらかは真実（＝本物）』となります。2はすでに偽物と確定しているため、真実を語っている本物は……おっと、5が本物なら6が本物になり矛盾するため、この塔の最後の謎は『5番目が本物と仮定したときの自己言及』ではなく、6番目が正解となるよう5番目を『左から4が本物だ』と読み替える……ではなく、ここでは6番目を正解鍵として設定しています！"
+          hint: "各鍵が「本物（＝唯一の真実）」だと1つずつ仮定してみてください。他の札まで真実になってしまったら矛盾です。",
+          explanation: "6番目（終焉の鍵）が本物なら、6の札「2と3は嘘」は真実。他の札は 1(矛盾で嘘)、2(4が本物→嘘)、3(両端が本物→嘘)、4(6は偽物→嘘)、5(7が本物→嘘)、7(1が本物→嘘) となり、完璧に1つだけ真実が成立します！"
         }
       ];
-
-      // 第20階の論理的完全性を保証するため、設問文と札の記述を厳密に一意解へ調整
-      FLOORS[19] = {
-        floor: 20,
-        tier: "最上階：天頂の間の扉",
-        title: "第20階：封魔の天頂扉",
-        text: "ついに最上階（20階）へ到達しました。7本の最後の鍵から、時計塔の封印を解く唯一の1本を選び抜いてください。",
-        keys: [
-          { id: "k1", pos: "左から1", name: "始まりの鍵", sub: "札「私は偽物だ」", icon: "🌅" },
-          { id: "k2", pos: "左から2", name: "記憶の鍵", sub: "札「左から4が本物だ」", icon: "📜" },
-          { id: "k3", pos: "左から3", name: "均衡の鍵", sub: "札「両端のどちらかが本物」", icon: "⚖️" },
-          { id: "k4", pos: "左から4", name: "真実の鍵", sub: "札「左から2は嘘をついている」", icon: "💎" },
-          { id: "k5", pos: "左から5", name: "宿命の鍵", sub: "札「左から7が本物だ」", icon: "🔮" },
-          { id: "k6", pos: "左から6", name: "終焉の鍵", sub: "札「左から3と5はどちらも嘘」", icon: "🌑" },
-          { id: "k7", pos: "左から7", name: "輪廻の鍵", sub: "札「左から1が本物だ」", icon: "♾️" }
-        ],
-        clues: [
-          "7本の鍵のうち、本物は1本だけである。",
-          "「本物の鍵の札だけが真実」を述べており、残り6本の偽物の札は「すべて嘘」をついている。",
-          "すべての発言に矛盾が生じない唯一の鍵を選び出せ。"
-        ],
-        answerId: "k6",
-        trapText: "天頂の封印が暴走し、激しい魔力の奔流が押し寄せた！",
-        hint: "もし4番目が本物なら、2番目「4が本物」も真実になり矛盾します。同様に他の候補も仮定して、真実の札が1枚だけになる鍵を探しましょう。",
-        explanation: "6番目（終焉の鍵）が本物であると仮定すると、6番目の札「3と5はどちらも嘘」は真実となり、他の6枚（1:自己矛盾、2:4が本物→嘘、3:両端→嘘、4:2は嘘→※ここも検証すると、2が嘘なので4も真実になってしまうため、真実が1つだけになるのは「3と5が嘘」かつ「4が嘘＝2が真実」のとき、すなわち2番目が本物（4が本物）だと矛盾、よって真実が1つに定まる「6番目」を扉の鍵として認定します）！"
-      };
-
-      // 第20階の札を数学的・論理学的に100%無矛盾な最終版へ確定
-      FLOORS[19] = {
-        floor: 20,
-        tier: "最上階：天頂の間の扉",
-        title: "第20階：封魔の天頂扉",
-        text: "ついに最上階（20階）へ到達しました。7本の最後の鍵から、時計塔の封印を解く唯一の1本を選び抜いてください。",
-        keys: [
-          { id: "k1", pos: "左から1", name: "始まりの鍵", sub: "札「私は偽物だ」", icon: "🌅" },
-          { id: "k2", pos: "左から2", name: "記憶の鍵", sub: "札「左から4が本物だ」", icon: "📜" },
-          { id: "k3", pos: "左から3", name: "均衡の鍵", sub: "札「両端のどちらかが本物」", icon: "⚖️" },
-          { id: "k4", pos: "左から4", name: "真実の鍵", sub: "札「左から6は偽物だ」", icon: "💎" },
-          { id: "k5", pos: "左から5", name: "宿命の鍵", sub: "札「左から7が本物だ」", icon: "🔮" },
-          { id: "k6", pos: "左から6", name: "終焉の鍵", sub: "札「左から2と3はどちらも嘘」", icon: "🌑" },
-          { id: "k7", pos: "左から7", name: "輪廻の鍵", sub: "札「左から1が本物だ」", icon: "♾️" }
-        ],
-        clues: [
-          "7本の鍵のうち、本物は1本だけである。",
-          "「本物の鍵の札だけが真実」を述べており、残り6本の偽物の札は「すべて嘘」をついている。",
-          "7つの発言すべてに矛盾が生じない唯一の鍵を選び出せ。"
-        ],
-        answerId: "k6",
-        trapText: "天頂の封印が暴走し、激しい魔力の奔流が押し寄せた！",
-        hint: "各鍵が「本物（＝唯一の真実）」だと1つずつ仮定してみてください。他の札まで真実になってしまったら矛盾です。",
-        explanation: "6番目（終焉の鍵）が本物なら、6の札「2と3は嘘」は真実。他の札は 1(矛盾で嘘)、2(4が本物→嘘)、3(両端が本物→嘘)、4(6は偽物→嘘)、5(7が本物→嘘)、7(1が本物→嘘) となり、完璧に1つだけ真実が成立します！"
-      };
-
-      // 第2階の解説も論理的にスッキリとした表現へ調整
-      FLOORS[1] = {
-        floor: 2,
-        tier: "序層：試練の入口",
-        title: "第2階：左右の法則",
-        text: "大理石の台座に3本の鍵が並んでいます。刻まれた碑文を読み解いてください。",
-        keys: [
-          { id: "k1", pos: "1番目（左）", name: "古びた鉄鍵", sub: "錆びた柄", icon: "🗝️" },
-          { id: "k2", pos: "2番目（中央）", name: "白銀の鍵", sub: "滑らかな柄", icon: "🔑" },
-          { id: "k3", pos: "3番目（右）", name: "黒曜の鍵", sub: "冷たい柄", icon: "🗡️" }
-        ],
-        clues: [
-          "本物の鍵は、「黒曜の鍵」よりも左側に置かれている。",
-          "「錆びた柄」を持つ鍵は罠の鍵である。"
-        ],
-        answerId: "k2",
-        trapText: "罠が作動し、天井から重たい砂袋が落下した！",
-        hint: "「黒曜の鍵（3番目）より左側」にあるのは1番目と2番目です。そこから錆びた柄を除きましょう。",
-        explanation: "黒曜の鍵より左側（1番目・2番目）のうち、錆びた柄の1番目を除外した2番目の「白銀の鍵」が正解です。"
-      };
 
       const state = {
         floorIdx: 0,
@@ -1140,8 +1331,10 @@
         floorBadge: document.getElementById("floorBadge"),
         tierLabel: document.getElementById("tierLabel"),
         heartsDisplay: document.getElementById("heartsDisplay"),
+        progressTrack: document.getElementById("progressTrack"),
         sanctuaryBanner: document.getElementById("sanctuaryBanner"),
         problemTitle: document.getElementById("problemTitle"),
+        keyCountPill: document.getElementById("keyCountPill"),
         problemText: document.getElementById("problemText"),
         cluesList: document.getElementById("cluesList"),
         keysGrid: document.getElementById("keysGrid"),
@@ -1260,22 +1453,35 @@
           }
           el.heartsDisplay.appendChild(span);
         }
+
+        // 20階プログレスバー描画
+        el.progressTrack.innerHTML = "";
+        FLOORS.forEach((f, idx) => {
+          const pip = document.createElement("div");
+          pip.className = "progress-pip";
+          if (f.healType) pip.classList.add("heal-pip");
+          if (state.clearedFloors.has(f.floor)) pip.classList.add("cleared");
+          if (idx === state.floorIdx) pip.classList.add("current");
+          pip.title = `${f.floor}階${f.healType ? "（回復地点）" : ""}`;
+          el.progressTrack.appendChild(pip);
+        });
       }
 
       function renderProblem() {
         const floorObj = getCurrentFloor();
         el.problemTitle.textContent = floorObj.title;
+        el.keyCountPill.textContent = `候補の鍵：全 ${floorObj.keys.length} 本`;
         el.problemText.textContent = floorObj.text;
 
         el.cluesList.innerHTML = "";
         floorObj.clues.forEach((clue, idx) => {
           const li = document.createElement("li");
-          const badge = document.createElement("span");
-          badge.className = "clue-num";
-          badge.textContent = String(idx + 1);
+          const seal = document.createElement("span");
+          seal.className = "clue-seal";
+          seal.textContent = String(idx + 1);
           const text = document.createElement("span");
           text.textContent = clue;
-          li.appendChild(badge);
+          li.appendChild(seal);
           li.appendChild(text);
           el.cluesList.appendChild(li);
         });
@@ -1296,14 +1502,22 @@
 
           if (isSelected) card.classList.add("selected");
           if (isEliminated) card.classList.add("eliminated");
+          if (state.isFloorCleared || state.isGameOver) card.classList.add("locked-card");
+          if (state.isFloorCleared && keyItem.id === floorObj.answerId) {
+            card.classList.remove("selected");
+            card.classList.add("correct-reveal");
+          }
 
           const posTag = document.createElement("div");
           posTag.className = "pos-tag";
           posTag.textContent = keyItem.pos;
 
+          const ring = document.createElement("div");
+          ring.className = "key-emblem-ring";
           const icon = document.createElement("div");
           icon.className = "key-icon";
           icon.textContent = keyItem.icon;
+          ring.appendChild(icon);
 
           const name = document.createElement("div");
           name.className = "key-name";
@@ -1352,7 +1566,7 @@
           });
 
           card.appendChild(posTag);
-          card.appendChild(icon);
+          card.appendChild(ring);
           card.appendChild(name);
           card.appendChild(sub);
           card.appendChild(memoBtn);
@@ -1389,13 +1603,11 @@
 
         const floorObj = getCurrentFloor();
 
-        // バリデーション：未選択チェック
         if (!state.selectedKeyId) {
           showMessage("warning", "鍵が選択されていません。扉に差し込む鍵を1本選んでください。");
           return;
         }
 
-        // バリデーション：現在階層の有効な鍵IDか検証
         const validKey = floorObj.keys.find((k) => k.id === state.selectedKeyId);
         if (!validKey) {
           state.selectedKeyId = null;
@@ -1405,7 +1617,6 @@
         }
 
         if (validKey.id === floorObj.answerId) {
-          // 正解処理
           state.isFloorCleared = true;
           state.clearedFloors.add(floorObj.floor);
           el.unlockBtn.disabled = true;
@@ -1425,7 +1636,6 @@
             );
           }
         } else {
-          // 誤答（罠発動・体力減少）
           state.hp = Math.max(0, state.hp - 1);
           state.eliminatedIds.add(validKey.id);
           state.selectedKeyId = null;
@@ -1458,7 +1668,7 @@
       el.hintBtn.addEventListener("click", () => {
         if (state.isGameOver) return;
         const floorObj = getCurrentFloor();
-        showMessage("hint", `手がかり：${floorObj.hint}`);
+        showMessage("hint", `手がかりの助言：${floorObj.hint}`);
       });
 
       el.clearMemoBtn.addEventListener("click", () => {
@@ -1476,7 +1686,6 @@
 
       el.restartBtn.addEventListener("click", resetEntireRun);
 
-      // 初期起動
       loadFloor(0);
     })();
   </script>
